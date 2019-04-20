@@ -1,0 +1,12 @@
+body{
+  font-family: 'Work Sans', sans-serif;
+  background: #f8f8f8f8;
+  margin: 0px;
+}
+.centered{
+  margin-left: auto;
+  margin-right: auto;
+}
+.padded{
+  padding: 16px;
+}
