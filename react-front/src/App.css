@@ -10,3 +10,8 @@ body{
 .padded{
   padding: 16px;
 }
+
+.container{
+  margin-left: 24px;
+  margin-right: 24px;
+}

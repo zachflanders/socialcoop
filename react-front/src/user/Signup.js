@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 import {Link} from 'react-router-dom'
+import {signup} from '../auth';
 
 
 const styles = theme => ({
@@ -42,7 +43,8 @@ class Signup extends Component {
       email,
       password
     };
-    this.signup(user)
+    
+    signup(user)
     .then(data =>{
       if(data.error){
         this.setState({error: data.error})
@@ -60,20 +62,6 @@ class Signup extends Component {
 
   };
 
-  signup = (user) =>{
-    return fetch("http://localhost:8080/signup",{
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(user)
-    })
-    .then(response => {
-      return response.json()
-    })
-    .catch(err => console.log(err))
-  };
 
   signupForm = (name, email, password, classes) => (
     <form style={{textAlign:'center'}}>
@@ -111,9 +99,9 @@ class Signup extends Component {
 
   render() {
     const { classes } = this.props;
-    const {name, email, password, error} = this.state;
+    const {name, email, password} = this.state;
     return(
-      <div style={{paddingTop: '32px'}}>
+      <div>
         <Paper className='centered padded' style={{width:'350px'}}>
           <Typography variant="h5" component="h2" style={{textAlign:'center'}}>Create Account</Typography>
           {this.signupForm(name, email, password, classes)}

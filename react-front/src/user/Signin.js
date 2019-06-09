@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 import {Link, Redirect} from 'react-router-dom'
+import {signin, authenticate} from '../auth'
 
 
 const styles = theme => ({
@@ -43,14 +44,14 @@ class Signin extends Component {
       email,
       password
     };
-    this.signin(user)
+    signin(user)
     .then(data =>{
       if(data.error){
         this.setState({error: data.error, loading: false})
       }
       else{
         //authenticate
-        this.authenticate(data, ()=>{
+        authenticate(data, ()=>{
           this.setState({redirectToReferer: true})
         })
         //redirect
@@ -59,27 +60,7 @@ class Signin extends Component {
 
   };
 
-  signin = (user) =>{
-    return fetch("http://localhost:8080/signin",{
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(user)
-    })
-    .then(response => {
-      return response.json()
-    })
-    .catch(err => console.log(err))
-  };
 
-  authenticate(jwt, next){
-    if(typeof window !== "undefined"){
-      localStorage.setItem("jwt", JSON.stringify(jwt));
-      next();
-    }
-  }
 
   signinForm = (email, password, classes) => (
     <form style={{textAlign:'center'}}>
@@ -115,7 +96,7 @@ class Signin extends Component {
       return <Redirect to='/' />
     }
     return(
-      <div style={{paddingTop: '32px'}}>
+      <div>
         <Paper className='centered padded' style={{width:'350px'}}>
           <Typography variant="h5" component="h2" style={{textAlign:'center'}}>Login</Typography>
           {loading ? <div style={{textAlign:'center'}}>Loading...</div> : ""}

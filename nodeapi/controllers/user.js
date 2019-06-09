@@ -1,5 +1,8 @@
 const User = require('../models/user');
 const _ = require('lodash');
+const formidable = require('formidable');
+const fs = require('fs');
+
 
 exports.userById = (req, res, next, id) =>{
   User.findById(id).exec((err, user)=>{
@@ -30,7 +33,7 @@ exports.allUsers = (req, res) => {
         error: err
       })
     }
-    res.json({users});
+    res.json(users);
   }).select("name email updated created")
 };
 
@@ -57,6 +60,36 @@ exports.updateUser = (req, res, next) => {
   })
 }
 
+exports.updateUser = (req, res, next) =>{
+  let form = new formidable.IncomingForm();
+  form.keepExtensions = true;
+  form.parse(req, (err, fields, files)=>{
+    if(err){
+      return res.status(400).json({
+        error: 'Photo could not be uploaded.'
+      })
+    }
+    let user = req.profile;
+    user = _.extend(user, fields)
+    user.updated = Date.now()
+    if(files.photo){
+      user.photo.data = fs.readFileSync(files.photo.path)
+      user.photo.contentType = files.photo.type
+    }
+    user.save((err, result) =>{
+      if(err){
+        return res.status(400).json({
+          error: err,
+        })
+      }
+      user.hashed_password = undefined;
+      user.salt = undefined;
+      res.json(user);
+
+    })
+  })
+}
+
 exports.deleteUser = (req, res, next) => {
   let user = req.profile;
   user.remove((err, user)=>{
@@ -67,4 +100,13 @@ exports.deleteUser = (req, res, next) => {
     }
     return res.json({message: `User ${user.name} has been deleted`});
   })
+}
+
+exports.userPhoto = (req, res, next)=>{
+  if (req.profile.photo.data){
+    res.set("Content-Type",req.profile.photo.contentType)
+    return res.send(req.profile.photo.data)
+  }
+  
+  next()
 }
