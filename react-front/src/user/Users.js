@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import {list} from './apiUser';
-import { Card, CardActions, Button, Typography, Avatar, CardHeader } from '@material-ui/core';
+import { Card, CardActions, Button, Typography, Avatar, CardHeader, CardContent } from '@material-ui/core';
 import {Link} from 'react-router-dom';
 import DefaultProfile from '../assets/avatar.png'
+import PlaceIcon from '@material-ui/icons/Place';
+
 
 class Users extends Component {
     constructor(){
@@ -24,25 +26,33 @@ class Users extends Component {
 
     renderUsers=(users)=>{
          return users.map((user, i)=>{
-             console.log(user)
+            console.log(user)
             const photoURL = user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : '../assets/avatar.png'
+            console.log(user, photoURL)
             return(
             <Card key={i} style={{marginBottom:'10px', marginRight:'10px', width:'400px'}}>
                 <CardHeader
                     avatar = {
                         <Avatar align='middle'
-                        style={{
-                            backgroundImage: `URL(${photoURL})`,
-                            backgroundSize: 'cover',
-                            backgroundColor:'#eee'
-                        }}>
+                            src={photoURL}
+                            imgProps={{ onError: (e) => { e.target.src = DefaultProfile; } }}
+                            style={{
+                                backgroundColor:'#eee',
+                                height: '50px',
+                                width: '50px'
+                            }}>
                         </Avatar>
                     }
                     title = {user.name}
+                    titleTypographyProps = {{variant:'h6'}}
+                    subheader = {user.location}
                     >
                 </CardHeader>
+                <CardContent>
+                    {user.about ? user.about: <span>&nbsp;</span>}
+                </CardContent>
                  
-                <CardActions>
+                <CardActions >
                     <Button
                         component={Link}
                         to={`/user/${user._id}`}

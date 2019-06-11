@@ -6,9 +6,11 @@ import {Link} from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { Typography, Avatar, Divider } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
+import PlaceIcon from '@material-ui/icons/Place';
 import DeleteUser from './DeleteUser'
 
-import DefaultAvatar from '../assets/avatar.png';
+import DefaultProfile from '../assets/avatar.png';
+let photoURL = undefined;
 
 
 class Profile extends Component {
@@ -41,30 +43,40 @@ class Profile extends Component {
     }
 
     componentWillReceiveProps(props){
+        
         const userId = props.match.params.userId;
         this.init(userId);  
     }
 
     render(){
         const {redirectToSignin, user} = this.state;
-        const photoURL = user.photo ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : '../assets/avatar.png'
+        photoURL = undefined;
+        photoURL = user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : ''
 
         if(redirectToSignin) return <Redirect to="/login" />
         return(
             <div className = 'container'>
                 <div style={{display:'flex', flexWrap:'wrap'}}>
-                    <Avatar style={{
-                        marginRight:'10px', 
-                        width:'60px', 
-                        height:'60px',
-                        backgroundImage: `URL(${photoURL})`,
-                        backgroundSize: 'cover'
+                    <Avatar 
+                        src={photoURL}
+                        imgProps={{ onError: (e) => { e.target.src = DefaultProfile; } }}
+                        style={{
+                            marginRight:'10px', 
+                            width:'80px', 
+                            height:'80px',
+                            backgroundColor:'#eee'
                     }}
-
-                    >                    </Avatar>
-                    <Typography variant='h4' style={{flexGrow:'1', padding:'10px'}}>
-                        {user.name}
-                    </Typography> 
+                    />
+                    <div style={{flexGrow:'1', padding:'10px'}}>                
+                        <Typography variant='h4' >
+                            {user.name}
+                        </Typography> 
+                        <Typography style={{fontSize:'14px'}} color='textSecondary'>
+                            {user.location ? 
+                            <span><PlaceIcon style={{height:'18px',verticalAlign:'-4'}} />
+                            {user.location}</span> : ''}
+                        </Typography>
+                    </div>
                     {isAuthenticated().user && isAuthenticated().user._id === user._id && (
                         <div style={{paddingTop:'10px'}}>
                             <Button
@@ -75,7 +87,6 @@ class Profile extends Component {
                                 <EditIcon />&nbsp;
                                 Edit Profile
                             </Button>
-                            <DeleteUser userId={user._id} />
                         </div>
                     )}
                 </div>
@@ -83,8 +94,8 @@ class Profile extends Component {
                 <Divider/>
                 <br />
                 <div >
-                    Email: {user.email} <br />
-                    Joined {`${new Date(user.created).toDateString()}`}
+                    Joined {user.created ? `${new Date(user.created).toDateString()}`:''} <br />
+                    About: {user.about}
                 </div>
             </div>
         )

@@ -5,7 +5,10 @@ const fs = require('fs');
 
 
 exports.userById = (req, res, next, id) =>{
-  User.findById(id).exec((err, user)=>{
+  User.findById(id)
+  .populate('following','_id, name')  
+  .populate('followers','_id, name') 
+  .exec((err, user)=>{
     if(err || !user){
       return res.status(400).json({
         error: "User not found"
@@ -34,7 +37,7 @@ exports.allUsers = (req, res) => {
       })
     }
     res.json(users);
-  }).select("name email updated created")
+  }).select("name email location about updated created")
 };
 
 exports.getUser = (req, res) =>{
@@ -110,3 +113,11 @@ exports.userPhoto = (req, res, next)=>{
   
   next()
 }
+
+exports.addFollowing = (req, res, next)=> {
+
+};
+
+exports.addFollower = (req, res, next) =>{
+
+};

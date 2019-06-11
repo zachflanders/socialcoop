@@ -11,6 +11,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import {logout, isAuthenticated} from '../auth'
+import { Avatar } from '@material-ui/core';
+import DefaultProfile from '../assets/avatar.png'
+
 
 
 
@@ -52,7 +55,7 @@ class Nav extends React.Component {
     const { classes, history } = this.props;
     const {anchorEl} = this.state;
     const open = Boolean(anchorEl);
-    const photoURL = isAuthenticated().user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${isAuthenticated().user._id }?${new Date().getTime()}` : '../assets/avatar.png'
+    const photoURL = isAuthenticated() ? `${process.env.REACT_APP_API_URL}/user/photo/${isAuthenticated().user._id }?${new Date().getTime()}` : '../assets/avatar.png'
 
     return (
       <div className={classes.root}>
@@ -76,13 +79,14 @@ class Nav extends React.Component {
                   aria-haspopup="true"
                   onClick={this.handleMenu}
                   color="inherit"
-                  style={{
-                    backgroundImage: `URL(${photoURL})`,
-                    backgroundSize: 'cover',
-                    width: '40px',
-                    height: '40px'
-                  }}
+                  style={{padding:'6px'}}
                 >
+                  <Avatar
+                    src={photoURL}
+                    imgProps={{ onError: (e) => { e.target.src = DefaultProfile; } }}
+                  >
+
+                  </Avatar>
                 </IconButton>
                 <Menu
                   id="menu-appbar"

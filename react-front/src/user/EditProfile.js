@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Typography, TextField, Button, Paper, Divider } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import {isAuthenticated} from '../auth';
-import {read, update} from './apiUser';
+import {read, update, updateUser} from './apiUser';
 import {Redirect} from 'react-router-dom';
+import DeleteUser from './DeleteUser'
+
 
 const styles = theme => ({
 
@@ -24,7 +26,9 @@ class EditProfile extends Component {
             redirectToProfile: false,
             error:'',
             loading: false,
-            fileSize: 0
+            fileSize: 0,
+            about:'',
+            location:''
         }
     }
 
@@ -36,7 +40,13 @@ class EditProfile extends Component {
                 this.setState({redirectToProfile: true})
             }
             else{
-                this.setState({id: data._id, name: data.name, email: data.email, })
+                this.setState({
+                    id: data._id, 
+                    name: data.name, 
+                    email: data.email, 
+                    about:data.about,
+                    location: data.location 
+                })
             }
         })
     }
@@ -59,19 +69,19 @@ class EditProfile extends Component {
     isValid = () =>{
         const {name, email, password, fileSize} = this.state;
         if(name.length === 0){
-            this.setState({error:'Name is required.'});
+            this.setState({error:'Name is required.', loading:false});
             return false
         }
         if(email.length === 0){
-            this.setState({error:'Email is required.'});
+            this.setState({error:'Email is required.', loading:false});
             return false
         }
         if(password.length >= 1 && password.length <= 5){
-            this.setState({error:'Password must contain at least 6 characters.'});
+            this.setState({error:'Password must contain at least 6 characters.', loading:false});
             return false
         }
-        if(fileSize > 300000){
-            this.setState({error:'File size must be less than 300kb'});
+        if(fileSize > 800000){
+            this.setState({error:'File size must be less than 800kb', loading:false});
             return false
         }
         return true
@@ -90,15 +100,18 @@ class EditProfile extends Component {
                     this.setState({error: data.error})
                 }
                 else{
-                    this.setState({
-                        redirectToProfile: true
+                    updateUser(data, ()=>{
+                        this.setState({
+                            redirectToProfile: true
+                        })
                     })
+                    
                 }
             });
         }
     }
 
-    editProfileForm = (name, email, password, classes, id) => {
+    editProfileForm = (name, location, email, password, about, classes, id) => {
         const photoURL = id ? `${process.env.REACT_APP_API_URL}/user/photo/${id}?${new Date().getTime()}` : '../assets/avatar.png'
         return(
         
@@ -109,6 +122,13 @@ class EditProfile extends Component {
             label="Name"
             onChange={this.handleChange("name")}
             value={name}
+            />
+            <TextField
+                id="location"
+                className={classes.textField}
+                label="Location"
+                onChange={this.handleChange("location")}
+                value={location}
             />
             <img src={photoURL} alt='' width='300'/>
             <Typography color='textSecondary' style={{fontSize:'12px', paddingBottom:'6px'}} >
@@ -137,6 +157,14 @@ class EditProfile extends Component {
             onChange={this.handleChange("password")}
             value={password}
             />
+            <TextField
+                id="about"
+                multiline
+                className={classes.textField}
+                label="About"
+                onChange={this.handleChange("about")}
+                value={about}
+            />
         <Button
           onClick={this.clickSubmit}
           variant='contained'
@@ -149,7 +177,7 @@ class EditProfile extends Component {
 
     render(){
         const { classes } = this.props;
-        const { id, name, email, password, error, redirectToProfile, loading} = this.state;
+        const { id, name, location, email, password, about, error, redirectToProfile, loading} = this.state;
         if(redirectToProfile){
             return(<Redirect to={`/user/${id}`} />)
         }
@@ -160,9 +188,21 @@ class EditProfile extends Component {
                 </Typography> 
                 {error}
                 <Paper style={{maxWidth:'600px', padding:'16px', marginTop:'16px'}}>
-                    {this.editProfileForm(name, email, password, classes, id)}
+                    {this.editProfileForm(name, location, email, password, about, classes, id)}
+                    <br/>
+                    
+
                     {loading ? <div>Loading...</div> : ''}
                 </Paper>
+                <Paper style={{maxWidth:'600px', padding:'16px', marginTop:'16px'}}>
+                    <Typography variant='h5' style={{color:'#e74c3c'}}>
+                        Danger Zone
+                    </Typography>
+                    <br/>
+                    <DeleteUser userId={id} />
+                </Paper>
+                <br/>
+         
 
             </div>
         )      
