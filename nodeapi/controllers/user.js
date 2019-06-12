@@ -6,8 +6,8 @@ const fs = require('fs');
 
 exports.userById = (req, res, next, id) =>{
   User.findById(id)
-  .populate('following','_id, name')  
-  .populate('followers','_id, name') 
+  .populate('following','_id name location about')  
+  .populate('followers','_id name location about') 
   .exec((err, user)=>{
     if(err || !user){
       return res.status(400).json({
@@ -115,9 +115,56 @@ exports.userPhoto = (req, res, next)=>{
 }
 
 exports.addFollowing = (req, res, next)=> {
-
+  console.log('add following')
+  User.findByIdAndUpdate(req.body.userId, 
+    {$push: {following: req.body.followId}}, (err, result)=>{
+      if(err){
+        return res.status(400).json({error: err})
+      }
+      next()
+  })
 };
 
-exports.addFollower = (req, res, next) =>{
+exports.addFollower = (req, res) =>{
+  User.findByIdAndUpdate(req.body.followId, 
+    {$push: {followers: req.body.userId}},
+    {new: true} 
+  )
+  .populate('following', '_id name location about')
+  .populate('followers', '_id name location about')
+  .exec((err, result)=>{
+    if(err){
+      return res.status(400).json({error: err})
+    }
+    result.hashed_password = undefined;
+    result.salt = undefined;
+    return res.json(result);
+  })
+};
 
+exports.removeFollowing = (req, res, next)=> {
+  User.findByIdAndUpdate(req.body.userId, 
+    {$pull: {following: req.body.unfollowId}}, (err, result)=>{
+      if(err){
+        return res.status(400).json({error: err})
+      }
+      next()
+  })
+};
+
+exports.removeFollower = (req, res, next) =>{
+  User.findByIdAndUpdate(req.body.unfollowId, 
+    {$pull: {followers: req.body.userId}},
+    {new: true} 
+  )
+  .populate('following', '_id name')
+  .populate('followers', '_id name')
+  .exec((err, result)=>{
+    if(err){
+      return res.status(400).json({error: err})
+    }
+    result.hashed_password = undefined;
+    result.salt = undefined;
+    return res.json(result);
+  })
 };

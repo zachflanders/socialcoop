@@ -7,7 +7,8 @@ import Button from '@material-ui/core/Button';
 import { Typography, Avatar, Divider } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaceIcon from '@material-ui/icons/Place';
-import DeleteUser from './DeleteUser'
+import FollowProfileButton from './FollowProfileButton'
+import ProfileTabs from './ProfileTabs'
 
 import DefaultProfile from '../assets/avatar.png';
 let photoURL = undefined;
@@ -17,12 +18,34 @@ class Profile extends Component {
     constructor(){
         super()
         this.state = {
-            user:'',
-            redirectToSignin: false
+            user:{ following:[], followers:[]},
+            redirectToSignin: false,
+            following: false,
+            error: ''
         }
     }
 
-    
+    checkFollower = user => {
+        const jwt = isAuthenticated();
+        const match = user.followers.find(follower => {
+            return follower._id === jwt.user._id
+        })
+        return match
+    }
+
+    clickFollowButton = callApi => {
+        const userId = isAuthenticated().user._id;
+        const token = isAuthenticated().token;
+        callApi(userId, token, this.state.user._id)
+        .then(data=>{
+            if(data.error){
+                this.setState({error: data.error})
+            }
+            else{
+                this.setState({user:data, following: !this.state.following})
+            }
+        })
+    }
 
     init = (userId) => {
         const token = isAuthenticated().token
@@ -32,7 +55,8 @@ class Profile extends Component {
                 this.setState({redirectToSignin: true})
             }
             else{
-                this.setState({user:data})
+                let following = this.checkFollower(data)
+                this.setState({user:data, following})
             }
         })
     }
@@ -50,6 +74,8 @@ class Profile extends Component {
 
     render(){
         const {redirectToSignin, user} = this.state;
+        var dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+
         photoURL = undefined;
         photoURL = user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : ''
 
@@ -77,7 +103,7 @@ class Profile extends Component {
                             {user.location}</span> : ''}
                         </Typography>
                     </div>
-                    {isAuthenticated().user && isAuthenticated().user._id === user._id && (
+                    {isAuthenticated().user && isAuthenticated().user._id === user._id ? (
                         <div style={{paddingTop:'10px'}}>
                             <Button
                                 component={Link}
@@ -88,14 +114,26 @@ class Profile extends Component {
                                 Edit Profile
                             </Button>
                         </div>
-                    )}
+                    ): (user._id && 
+                        <div style={{paddingTop:'10px'}}>
+                            <FollowProfileButton 
+                                following={this.state.following} 
+                                onButtonClick= {this.clickFollowButton}
+                            />
+                        </div>)}
                 </div>
                 <br />
                 <Divider/>
-                <br />
-                <div >
-                    Joined {user.created ? `${new Date(user.created).toDateString()}`:''} <br />
-                    About: {user.about}
+                <br/>
+                <div style={{display:'flex', flexWrap:'wrap'}}>
+                    <div style={{flexGrow:1, maxWidth:'300px', fontSize:'14px', padding:'0px 20px 0px 0px'}}>
+                        Joined {user.created ? `${new Date(user.created).toLocaleDateString('en-US', dateOptions)}`:''} 
+                        <br />
+                        {user.about}
+                    </div>
+                    <div style={{flexGrow: 3}}>
+                        <ProfileTabs followers={user.followers} following={user.following} />
+                    </div>
                 </div>
             </div>
         )

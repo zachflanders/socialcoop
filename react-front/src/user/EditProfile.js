@@ -97,7 +97,8 @@ class EditProfile extends Component {
             update(userId, token, this.userData)
             .then(data =>{
                 if(data.error){
-                    this.setState({error: data.error})
+                    console.log(data.error.message);
+                    this.setState({error: data.error.message})
                 }
                 else{
                     updateUser(data, ()=>{
