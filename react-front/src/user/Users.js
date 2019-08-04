@@ -4,6 +4,7 @@ import { Card, CardActions, Button, Typography, Avatar, CardHeader, CardContent 
 import {Link} from 'react-router-dom';
 import DefaultProfile from '../assets/avatar.png'
 import PlaceIcon from '@material-ui/icons/Place';
+import UserCard from './UserCard';
 
 
 class Users extends Component {
@@ -30,37 +31,7 @@ class Users extends Component {
             const photoURL = user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : '../assets/avatar.png'
             console.log(user, photoURL)
             return(
-            <Card key={i} style={{marginBottom:'10px', marginRight:'10px', width:'400px'}}>
-                <CardHeader
-                    avatar = {
-                        <Avatar align='middle'
-                            src={photoURL}
-                            imgProps={{ onError: (e) => { e.target.src = DefaultProfile; } }}
-                            style={{
-                                backgroundColor:'#eee',
-                                height: '50px',
-                                width: '50px'
-                            }}>
-                        </Avatar>
-                    }
-                    title = {user.name}
-                    titleTypographyProps = {{variant:'h6'}}
-                    subheader = {user.location}
-                    >
-                </CardHeader>
-                <CardContent>
-                    {user.about ? user.about: <span>&nbsp;</span>}
-                </CardContent>
-                 
-                <CardActions >
-                    <Button
-                        component={Link}
-                        to={`/user/${user._id}`}
-                    >
-                        View Profile
-                    </Button>
-                </CardActions>  
-            </Card>
+            <UserCard user={user} key={i} />
         )})
     }
 

@@ -21,8 +21,6 @@ class EditProfile extends Component {
         this.state = {
             id:'',
             name:'',
-            email:'',
-            password:'',
             redirectToProfile: false,
             error:'',
             loading: false,
@@ -43,7 +41,6 @@ class EditProfile extends Component {
                 this.setState({
                     id: data._id, 
                     name: data.name, 
-                    email: data.email, 
                     about:data.about,
                     location: data.location 
                 })
@@ -70,14 +67,6 @@ class EditProfile extends Component {
         const {name, email, password, fileSize} = this.state;
         if(name.length === 0){
             this.setState({error:'Name is required.', loading:false});
-            return false
-        }
-        if(email.length === 0){
-            this.setState({error:'Email is required.', loading:false});
-            return false
-        }
-        if(password.length >= 1 && password.length <= 5){
-            this.setState({error:'Password must contain at least 6 characters.', loading:false});
             return false
         }
         if(fileSize > 800000){
@@ -142,22 +131,6 @@ class EditProfile extends Component {
                 id='profileUpload'
                 style= {{marginBottom:'16px'}}
                 />
-          <TextField
-            id="email"
-            className={classes.textField}
-            label="Email"
-            type='email'
-            onChange={this.handleChange("email")}
-            value={email}
-            />
-          <TextField
-            id="password"
-            className={classes.textField}
-            label="Password"
-            type='password'
-            onChange={this.handleChange("password")}
-            value={password}
-            />
             <TextField
                 id="about"
                 multiline

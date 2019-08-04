@@ -7,7 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import AddIcon from '@material-ui/icons/Add';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import {logout, isAuthenticated} from '../auth'
@@ -74,6 +74,14 @@ class Nav extends React.Component {
               <>
                 
               <div>
+              <Button
+                  color="inherit"
+                  component = {Link}
+                  to='/post/create'  
+                  style={{marginRight:'8px'}}
+                >
+                  <AddIcon /> Create Post
+                </Button>
                 <IconButton
                   aria-owns={open ? 'menu-appbar' : undefined}
                   aria-haspopup="true"

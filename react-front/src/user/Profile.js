@@ -126,12 +126,12 @@ class Profile extends Component {
                 <Divider/>
                 <br/>
                 <div style={{display:'flex', flexWrap:'wrap'}}>
-                    <div style={{flexGrow:1, maxWidth:'300px', fontSize:'14px', padding:'0px 20px 0px 0px'}}>
+                    <div style={{width:'15%', minWidth:'300px', fontSize:'14px', padding:'0px 20px 0px 0px'}}>
                         Joined {user.created ? `${new Date(user.created).toLocaleDateString('en-US', dateOptions)}`:''} 
                         <br />
                         {user.about}
                     </div>
-                    <div style={{flexGrow: 3}}>
+                    <div style={{width:'50%', flexGrow:1}}>
                         <ProfileTabs followers={user.followers} following={user.following} />
                     </div>
                 </div>

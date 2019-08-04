@@ -15,20 +15,22 @@ exports.postById = (req, res, next, id) =>{
     }
     req.post = post
     next()
-  })
+  }) 
 }
 
 exports.getPosts = (req, res) =>{
   const posts = Post.find()
+  .sort('-created ')
   .populate('postedBy', '_id name')
-  .select("_id title body")
+  .select("_id title body created")
   .then((posts)=> {
-    res.json({ posts });
+    res.json(posts);
   })
   .catch(err => console.log(err));
 }
 
 exports.createPost = (req, res) => {
+  
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) =>{
@@ -38,6 +40,7 @@ exports.createPost = (req, res) => {
       })
     }
     let post = new Post(fields);
+    console.log(post)
     req.profile.hashed_password = undefined;
     req.profile.salt = undefined;
     post.postedBy = req.profile;
@@ -107,4 +110,9 @@ exports.deletePost = (req, res) =>{
       message: `Deleted post "${post.title}"`
     })
   })
+}
+
+exports.photo = (req, res, next) => {
+  res.set("Content-Type", req.post.photo.contentType);
+  return res.send(req.post.photo.data);
 }

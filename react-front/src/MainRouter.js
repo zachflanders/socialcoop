@@ -8,6 +8,7 @@ import Profile from './user/Profile';
 import Users from './user/Users';
 import EditProfile from './user/EditProfile';
 import PrivateRoute from './auth/PrivateRoute';
+import NewPost from './post/NewPost';
 
 
 
@@ -23,6 +24,8 @@ const MainRouter = () => (
       <Route exact path='/login' component={Signin}></Route>
       <PrivateRoute exact path='/user/:userId' component={Profile}></PrivateRoute>
       <PrivateRoute exact path='/user/edit/:userId' component={EditProfile}></PrivateRoute>
+      <PrivateRoute exact path='/post/create' component={NewPost}></PrivateRoute>
+
     </Switch>
   </div>
 )
