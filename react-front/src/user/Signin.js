@@ -38,9 +38,8 @@ class Signin extends Component {
   clickSubmit = event => {
     event.preventDefault();
     this.setState({loading: true});
-    const {name, email, password} = this.state;
+    const {email, password} = this.state;
     const user = {
-      name,
       email,
       password
     };
