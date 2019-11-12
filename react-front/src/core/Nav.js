@@ -65,7 +65,9 @@ class Nav extends React.Component {
               <Typography component={Link} to='/' variant="h6" color="inherit" style={{textDecoration:'none', marginRight:'20px'}}>
                 myCoop
               </Typography>
-              <Button component={Link} to='/users' color="inherit">Directory</Button>
+              {isAuthenticated() && (
+                <Button component={Link} to='/users' color="inherit">Directory</Button>
+              )}
             </div>
             {!isAuthenticated() && (
               <Button component={Link} to='/login' color="inherit">Login</Button>
