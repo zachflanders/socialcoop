@@ -7,7 +7,7 @@
       "server": "cd nodeapi && nodemon app.js",
       "full-stack": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
       "start":"cd nodeapi && node app.js",
-      "heroku-postbuild": "npm install && cd server && npm install && cd ../client && npm install && npm run build"
+      "heroku-postbuild": "npm install && cd nodeapi && npm install && cd ../react-front && npm install && npm run build"
     },
     "author": "Zach Flanders",
     "license": "ISC",
