@@ -26,7 +26,7 @@ const userRoutes = require("./routes/user");
 
 //middleware
 var corsOptions = {
-  origin: '*',
+  origin: 'https://mycoop-dev.herokuapp.com/',
   credentials: true };
 app.use(cors(corsOptions));
 app.use(morgan("dev"));
@@ -53,7 +53,7 @@ if (process.env.NODE_ENV === 'production') {
 
 
 
-const port = process.env.PORT || 8080;
+const port = 8080;
 app.listen(port, ()=>{
   console.log(`A Node JS API is listening on port ${port}`)
 });
