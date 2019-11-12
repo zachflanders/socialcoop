@@ -14,11 +14,9 @@ class PostCardImage extends Component {
 
     componentDidMount(){
         const {post} = this.props
-        console.log(post);
         fetch(`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`).then(res => {
             const reader = res.body.getReader();
             reader.read().then((data) => {
-                console.log(data);
                 if(data.value){
                     this.setState({image:true})
                 }
@@ -34,7 +32,7 @@ class PostCardImage extends Component {
             return (<div 
                 style={{
                     width: '100%',
-                    height: '200px',
+                    height: '300px',
                     backgroundPosition: "center center",
                     backgroundRepeat: "no-repeat",
                     backgroundSize: 'cover',
@@ -56,48 +54,55 @@ const PostCard = (props) =>{
     const photoURL =  `${process.env.REACT_APP_API_URL}/user/photo/${posterId}?${new Date().getTime()}`;
     var dateOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute:'numeric' };
 
-    return (<Card style={{marginBottom:'10px', marginRight:'10px'}}>
-                        <CardHeader
-                            avatar = {
-                                <Avatar align='middle'
-                                    component={Link}
-                                    to={`/user/${posterId}`}
-                                    src={photoURL}
-                                    imgProps={{ onError: (e) => { e.target.src = DefaultProfile; } }}
-                                    style={{
-                                        backgroundColor:'#eee',
-                                        height: '40px',
-                                        width: '40px'
-                                    }}>
-                                </Avatar>
-                            }
-                            action = {post.created ? 
-                                <Typography color='textSecondary' variant='h8' style={{padding:'16px 16px'}}>
-                                    {new Date(post.created).toLocaleDateString('en-US', dateOptions)}
-                                    </Typography>
-                                :
-                                    ''}
+    return (
+        <Card 
+            style={{
+                marginBottom:'10px', 
+                marginRight:'10px',
+                maxWidth: '650px',
+            }}
+        >
+            <CardHeader
+                avatar = {
+                    <Avatar align='middle'
+                        component={Link}
+                        to={`/user/${posterId}`}
+                        src={photoURL}
+                        imgProps={{ onError: (e) => { e.target.src = DefaultProfile; } }}
+                        style={{
+                            backgroundColor:'#eee',
+                            height: '40px',
+                            width: '40px'
+                        }}>
+                    </Avatar>
+                }
+                action = {post.created ? 
+                    <Typography color='textSecondary' variant='subtitle2' style={{padding:'16px 16px'}}>
+                        {new Date(post.created).toLocaleDateString('en-US', dateOptions)}
+                        </Typography>
+                    :
+                        ''}
 
-                            title = {<Link to={`/user/${posterId}`} style={{textDecoration:'none',color:'#000'}}>{posterName}</Link>}
-                            titleTypographyProps = {{variant:'h7'}}
-                            //subheader = {user.location ? <span><PlaceIcon style={{height:'18px',verticalAlign:'-4'}} />{user.location}</span>: ''}
-                            >
-                        </CardHeader>
-                        <PostCardImage post={post} />
-        
-                        <CardContent>
-                            <Typography variant='h6'>{post.title}</Typography>
-                            {post.body}
+                title = {<Link to={`/user/${posterId}`} style={{textDecoration:'none',color:'#000'}}>{posterName}</Link>}
+                titleTypographyProps = {{variant:'subtitle1'}}
+                //subheader = {user.location ? <span><PlaceIcon style={{height:'18px',verticalAlign:'-4'}} />{user.location}</span>: ''}
+                >
+            </CardHeader>
+            <PostCardImage post={post} />
 
-                        </CardContent>
-                        <CardActions>
-                            <Button
-                                component={Link}
-                                to={`/posts/${post._id}`}
-                            >
-                                Read More</Button>
-                        </CardActions>
-                    </Card>)
+            <CardContent>
+                <Typography variant='h6'>{post.title}</Typography>
+                {post.body}
+
+            </CardContent>
+            <CardActions>
+                <Button
+                    component={Link}
+                    to={`/posts/${post._id}`}
+                >
+                    Read More</Button>
+            </CardActions>
+        </Card>)
 }
 
 export default PostCard

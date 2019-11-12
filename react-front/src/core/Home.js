@@ -84,6 +84,7 @@ const Home = () => (
     <div className = 'container'>
       Hello, {isAuthenticated().user.name}
       <br/>
+      <br />
       <Posts />
     </div>
   )}

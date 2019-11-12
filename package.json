@@ -1,0 +1,18 @@
+{
+    "name": "mycoop",
+    "version": "0.0.0",
+    "description": "coop social network",
+    "scripts": {
+      "client": "cd react-front && yarn start",
+      "server": "cd nodeapi && nodemon app.js",
+      "full-stack": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+      "start":"cd nodeapi && node app.js",
+      "heroku-postbuild": "npm install && cd server && npm install && cd ../client && npm install && npm run build"
+    },
+    "author": "Zach Flanders",
+    "license": "ISC",
+    "devDependencies": {
+      "concurrently": "^3.5.0"
+    }
+  }
+  

@@ -9,7 +9,7 @@ import {isAuthenticated} from '../auth';
 
 
 
-class Posts extends Component {
+class UserPosts extends Component {
     constructor(props){
         super(props)
         this.state = {
@@ -20,7 +20,7 @@ class Posts extends Component {
         console.log(this.props)
         if(this.props.userId) {
             console.log(`getting posts for ${this.props.userId}`)
-            get_by_id(this.props.user).then(data => {
+            get_by_id(this.props.userId).then(data => {
                 if(data.error){
                     console.log(data.error)
                 }
@@ -30,23 +30,25 @@ class Posts extends Component {
                 }
             })
         }
-        else{
-            list().then(data =>{
+    }
+    componentDidUpdate(prevProps){
+        console.log(this.props)
+        if(this.props.userId && this.props.userId !== prevProps.userId) {
+            console.log(`getting posts for ${this.props.userId}`)
+            get_by_id(this.props.userId).then(data => {
                 if(data.error){
                     console.log(data.error)
                 }
                 else{
+                    console.log(data)
                     this.setState({posts:data})
                 }
             })
         }
-        
     }
-
 
     renderPosts=(posts)=>{
          return posts.map((post, i)=>{
-            //const photoURL = user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : '../assets/avatar.png'
             return(
             <PostCard post={post} key={i} />
         )})
@@ -54,6 +56,7 @@ class Posts extends Component {
 
     render(){
         const {posts} = this.state;
+        console.log(posts)
         return(
             <div>
                 <div style={{}}>
@@ -65,4 +68,4 @@ class Posts extends Component {
     }
 }
 
-export default Posts
+export default UserPosts

@@ -3,13 +3,12 @@ import { Button, Tabs, Tab, Paper, AppBar, Toolbar, Avatar, Card, CardHeader, Ca
 import DefaultProfile from '../assets/avatar.png';
 import UserCard from './UserCard';
 import {Link} from 'react-router-dom';
-
-
+import UserPosts from '../post/UserPosts';
 
 
 class ProfileTabs extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
             tabValue: 0
         }
@@ -20,7 +19,14 @@ class ProfileTabs extends Component {
     }
 
     renderPostsTab = () =>{
-        return ''
+        const  {userId, followers} = this.props;
+        return (
+            <div>
+                <br />
+                <UserPosts userId={userId}/>
+            </div>
+            
+        )
     }
 
     renderFollowersTab = () => {
@@ -50,7 +56,7 @@ class ProfileTabs extends Component {
 
 
     render(){
-        const  {following, followers} = this.props;
+        console.log(this.props)
         const {tabValue} = this.state
         return(
             <div>
