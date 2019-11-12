@@ -25,11 +25,14 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 
 //middleware
+var corsOptions = {
+  origin: '*',
+  credentials: true };
+app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
-app.use(cors());
 app.use("/", postRoutes);
 app.use("/", authRoutes);
 app.use("/", userRoutes);
