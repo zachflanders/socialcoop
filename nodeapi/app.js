@@ -27,13 +27,7 @@ const userRoutes = require("./routes/user");
 //middleware
 var whitelist = ['http://localhost:3000/', 'http://localhost:8080/', 'https://mycoop-dev.herokuapp.com/']
 var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  },
+  origin: '*',
   credentials: true };
 app.use(cors(corsOptions));
 app.use(morgan("dev"));
