@@ -50,6 +50,15 @@ app.use(function (err, req, res, next) {
   }
 });
 
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, '../react-front/build')));
+  // Handle React routing, return all requests to React app
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, '../react-front/build', 'index.html'));
+  });
+}
+
 
 
 const port = process.env.PORT || 8080;
