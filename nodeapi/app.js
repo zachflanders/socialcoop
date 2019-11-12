@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const morgan = require("morgan");
+const path = require('path');
 const bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 const expressValidator = require("express-validator");
