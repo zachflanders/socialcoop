@@ -25,8 +25,15 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 
 //middleware
+var whitelist = ['http://localhost:3000/', 'https://mycoop-dev.herokuapp.com/']
 var corsOptions = {
-  origin: 'https://mycoop-dev.herokuapp.com/',
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
   credentials: true };
 app.use(cors(corsOptions));
 app.use(morgan("dev"));
@@ -53,7 +60,7 @@ if (process.env.NODE_ENV === 'production') {
 
 
 
-const port = 8080;
+const port = process.env.PORT || 8080;
 app.listen(port, ()=>{
   console.log(`A Node JS API is listening on port ${port}`)
 });
