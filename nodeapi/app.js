@@ -25,18 +25,14 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 
 //middleware
-var whitelist = ['http://localhost:3000/', 'http://localhost:8080/', 'https://mycoop-dev.herokuapp.com/']
-var corsOptions = {
-  origin: '*',
-  credentials: true };
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
-app.use("/", postRoutes);
-app.use("/", authRoutes);
-app.use("/", userRoutes);
+app.use("/api/", postRoutes);
+app.use("/api/", authRoutes);
+app.use("/api/", userRoutes);
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({error: "unauthorized"});
