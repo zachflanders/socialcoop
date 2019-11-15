@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Button, Tabs, Tab, Paper, AppBar, Toolbar, Avatar, Card, CardHeader, CardContent, CardActions, Typography, Divider } from '@material-ui/core';
 import PlaceIcon from '@material-ui/icons/Place'
+import EditIcon from '@material-ui/icons/Edit'
+
 import DefaultProfile from '../assets/avatar.png';
 import {Link} from 'react-router-dom';
+import { isAuthenticated } from '../auth';
 
 class PostCardImage extends Component {
     constructor(props){
@@ -47,13 +50,16 @@ class PostCardImage extends Component {
 
 } 
 
+const isOwner = (id) => {
+    return id === isAuthenticated().user._id
+}
+
 const PostCard = (props) =>{
     const {post} = props
     const posterId = post.postedBy ? post.postedBy._id : '';
     const posterName = post.postedBy ? post.postedBy.name : '';
     const photoURL =  `${process.env.REACT_APP_API_URL}/user/photo/${posterId}?${new Date().getTime()}`;
     var dateOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute:'numeric' };
-
     return (
         <Card 
             style={{
@@ -92,15 +98,30 @@ const PostCard = (props) =>{
 
             <CardContent>
                 <Typography variant='h6'>{post.title}</Typography>
-                {post.body}
+                {
+                    post.body.split('\n').map((item, key) => {
+                        return <span key={key}>{item}<br/></span>
+                    })
+                }
 
             </CardContent>
             <CardActions>
                 <Button
                     component={Link}
-                    to={`/posts/${post._id}`}
+                    to={`/post/${post._id}`}
                 >
-                    Read More</Button>
+                    Read More
+                </Button>
+                {(
+                    isOwner(posterId) && 
+                    <Button
+                        component={Link}
+                        to={`/post/edit/${post._id}`}
+                        style={{marginLeft:'auto'}}
+                    >
+                        <EditIcon /> Edit
+                    </Button>
+                )}
             </CardActions>
         </Card>)
 }

@@ -3,6 +3,7 @@ const {getPosts,
   createPost,
   postsByUser,
   postById,
+  getPostById,
   isPoster,
   updatePost,
   deletePost,
@@ -21,6 +22,7 @@ router.post(
   createPostValidator
 );
 router.get("/posts/by/:userId", postsByUser);
+router.get("/post/:postId", getPostById);
 router.put("/post/:postId", requireSignin, isPoster, updatePost)
 router.delete("/post/:postId", requireSignin, isPoster, deletePost)
 //photo

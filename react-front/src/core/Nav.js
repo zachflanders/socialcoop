@@ -13,6 +13,9 @@ import Menu from '@material-ui/core/Menu';
 import {logout, isAuthenticated} from '../auth'
 import { Avatar } from '@material-ui/core';
 import DefaultProfile from '../assets/avatar.png'
+import MenuIcon from '@material-ui/icons/Menu';
+import './nav.css'
+
 
 
 
@@ -61,12 +64,21 @@ class Nav extends React.Component {
       <div className={classes.root}>
         <AppBar position="static" style={{marginBottom:'32px'}}>
           <Toolbar>
+            <IconButton
+                onClick = {this.props.toggleDrawer(true)}
+                id='menuButton'
+                color="inherit"
+                aria-label="Menu"
+                style={{marginLeft: -12, marginRight: 20}}
+            >
+              <MenuIcon />
+            </IconButton>
             <div className = {classes.grow}>
               <Typography component={Link} to='/' variant="h6" color="inherit" style={{textDecoration:'none', marginRight:'20px'}}>
                 myCoop
               </Typography>
               {isAuthenticated() && (
-                <Button component={Link} to='/users' color="inherit">Directory</Button>
+                <Button component={Link} to='/users' color="inherit" className='desktop'>Directory</Button>
               )}
             </div>
             {!isAuthenticated() && (
@@ -81,6 +93,7 @@ class Nav extends React.Component {
                   component = {Link}
                   to='/post/create'  
                   style={{marginRight:'8px'}}
+                  className='desktop'
                 >
                   <AddIcon /> Create Post
                 </Button>

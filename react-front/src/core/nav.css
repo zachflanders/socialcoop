@@ -1,0 +1,12 @@
+#menuButton {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    #menuButton {
+        display: inline-flex;;
+    }
+    a.desktop{
+        display: none;
+    }
+}

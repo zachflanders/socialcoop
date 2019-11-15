@@ -18,6 +18,10 @@ exports.postById = (req, res, next, id) =>{
   }) 
 }
 
+exports.getPostById = (req, res) =>{
+    res.json(req.post);
+}
+
 exports.getPosts = (req, res) =>{
   const posts = Post.find()
   .sort('-created ')

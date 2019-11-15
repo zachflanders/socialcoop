@@ -9,21 +9,31 @@ import Users from './user/Users';
 import EditProfile from './user/EditProfile';
 import PrivateRoute from './auth/PrivateRoute';
 import NewPost from './post/NewPost';
+import EditPost from './post/EditPost';
+import Post from './post/Post';
 
 
+const toggleDrawer = () => {
+  return null
+}
 
 
 const MainRouter = () => (
   <div>
-    <Nav />
+    <Nav 
+      toggleDrawer = {toggleDrawer}
+    />
     <Switch>
       <Route exact path='/' component={Home}></Route>
       <Route exact path='/users' component={Users}></Route>
       <Route exact path='/signup' component={Signup}></Route>
       <Route exact path='/login' component={Signin}></Route>
+      <PrivateRoute exact path='/post/create' component={NewPost}></PrivateRoute>
+      <PrivateRoute exact path='/post/edit' component={EditPost}></PrivateRoute>
+      <Route exact path='/post/:postId' component={Post}></Route>
+
       <PrivateRoute exact path='/user/:userId' component={Profile}></PrivateRoute>
       <PrivateRoute exact path='/user/edit/:userId' component={EditProfile}></PrivateRoute>
-      <PrivateRoute exact path='/post/create' component={NewPost}></PrivateRoute>
 
     </Switch>
   </div>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {list, get_by_id} from './apiPost';
+import {list, getByUserId} from './apiPost';
 import { Card, CardActions, Button, Typography, Avatar, CardHeader, CardContent } from '@material-ui/core';
 import {Link} from 'react-router-dom';
 import DefaultProfile from '../assets/avatar.png'
@@ -20,7 +20,7 @@ class UserPosts extends Component {
         console.log(this.props)
         if(this.props.userId) {
             console.log(`getting posts for ${this.props.userId}`)
-            get_by_id(this.props.userId).then(data => {
+            getByUserId(this.props.userId).then(data => {
                 if(data.error){
                     console.log(data.error)
                 }
@@ -35,7 +35,7 @@ class UserPosts extends Component {
         console.log(this.props)
         if(this.props.userId && this.props.userId !== prevProps.userId) {
             console.log(`getting posts for ${this.props.userId}`)
-            get_by_id(this.props.userId).then(data => {
+            getByUserId(this.props.userId).then(data => {
                 if(data.error){
                     console.log(data.error)
                 }
