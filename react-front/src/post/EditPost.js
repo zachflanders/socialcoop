@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { Typography, TextField, Button, Paper, Divider } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import {isAuthenticated} from '../auth';
-import {create} from './apiPost';
+import {getById, update} from './apiPost';
 import {Redirect} from 'react-router-dom';
+import DeletePost from './DeletePost';
 
-
-const styles = theme => ({
-
+const styles = () => ({
     textField: {
       width: '100%',
       marginBottom:'16px'
@@ -18,20 +17,49 @@ class EditPost extends Component {
     constructor(){
         super()
         this.state = {
-            title:'',
-            body:'',
-            photo:'',
-            error:'',
-            user:{},
-            fileSize:0,
+            id: '',
+            title: '',
+            body: '',
+            photo: '',
+            error: '',
+            user: {},
+            fileSize: 0,
             loading: false
         }
+    }
+
+    arrayBufferToBase64(buffer) {
+        var binary = '';
+        var bytes = [].slice.call(new Uint8Array(buffer));        
+        bytes.forEach((b) => binary += String.fromCharCode(b));        
+        return window.btoa(binary);
+    };
+
+    init = (postId) => {
+        getById(postId)
+        .then(data =>{
+            if(data.error){
+                console.log(data.error)
+            }
+            else{
+                var base64Flag = data.photo ? 'data:image/jpeg;base64,' : '';
+                var imageStr = data.photo ? (this.arrayBufferToBase64(data.photo.data.data)) : '';
+                this.setState({
+                    id: data._id, 
+                    title: data.title, 
+                    body: data.body,
+                    photo: data.photo ? (base64Flag + imageStr) : null 
+                })
+            }
+        })
     }
 
 
     componentDidMount(){
         this.postData = new FormData();
         this.setState({user:isAuthenticated().user})
+        const postId = this.props.match.params.postId;
+        this.init(postId);
     }
 
     handleChange = (name) => (event) => {
@@ -65,27 +93,24 @@ class EditPost extends Component {
         event.preventDefault();
         this.setState({loading: true})
         if(this.isValid()){
-            const userId = isAuthenticated().user._id
             const token = isAuthenticated().token;
-            create(userId, token, this.postData)
+            const postId = this.props.match.params.postId;
+            update(postId, token, this.postData)
             .then(data =>{
                 if(data.error){
                     this.setState({error: data.error.message})
                 }
                 else{
-                    console.log('new post');
+                    console.log('edited post');
                     this.setState({
-                        loading:false,
-                        title: '',
-                        body: '',
-                        photo:''
-                    })                
+                        loading: false
+                    })               
                 }
             });
         }
     }
 
-    editPostForm = (title, body, photo, user, classes) => {
+    editPostForm = (title, body, photo, id, classes) => {
         //const photoURL = id ? `${process.env.REACT_APP_API_URL}/post/photo/${post._id}?${new Date().getTime()}` : ''
         return(
         
@@ -97,6 +122,7 @@ class EditPost extends Component {
             onChange={this.handleChange("title")}
             value={title}
             />
+            <img src={photo} width='100%' alt='' />
             <input
                 onChange = {this.handleChange("photo")}
                 accept="image/*"
@@ -116,7 +142,7 @@ class EditPost extends Component {
             onClick={this.clickSubmit}
             variant='contained'
             color='primary'>
-                Publish
+                Update
             </Button>
         </form>
       )
@@ -124,18 +150,17 @@ class EditPost extends Component {
 
     render(){
         const { classes } = this.props;
-        const { title, body, photo, user, loading, error} = this.state;
+        const {id, title, body, photo, user, loading, error} = this.state;
         return(
             <div className='container'>
                 <Typography variant='h4' style={{flexGrow:'1'}}>
-                   Create a New Post
+                   Edit Post
                 </Typography> 
                 {error}
                 <Paper style={{maxWidth:'600px', padding:'16px', marginTop:'16px'}}>
-                    {this.editPostForm(title, body, photo, user, classes)}
+                    {this.editPostForm(title, body, photo, id, classes)}
                     <br/>
-                    
-
+                    <DeletePost id={id} />
                     {loading ? <div>Loading...</div> : ''}
                 </Paper>
                 

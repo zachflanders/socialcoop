@@ -56,7 +56,6 @@ class ProfileTabs extends Component {
 
 
     render(){
-        console.log(this.props)
         const {tabValue} = this.state
         return(
             <div>

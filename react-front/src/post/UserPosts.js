@@ -17,9 +17,7 @@ class UserPosts extends Component {
         }
     }
     componentDidMount(){
-        console.log(this.props)
         if(this.props.userId) {
-            console.log(`getting posts for ${this.props.userId}`)
             getByUserId(this.props.userId).then(data => {
                 if(data.error){
                     console.log(data.error)
@@ -32,9 +30,7 @@ class UserPosts extends Component {
         }
     }
     componentDidUpdate(prevProps){
-        console.log(this.props)
         if(this.props.userId && this.props.userId !== prevProps.userId) {
-            console.log(`getting posts for ${this.props.userId}`)
             getByUserId(this.props.userId).then(data => {
                 if(data.error){
                     console.log(data.error)
@@ -56,7 +52,6 @@ class UserPosts extends Component {
 
     render(){
         const {posts} = this.state;
-        console.log(posts)
         return(
             <div>
                 <div style={{}}>

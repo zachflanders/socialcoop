@@ -75,7 +75,6 @@ class Profile extends Component {
     }
 
     componentDidUpdate(prevProps){
-        console.log(this.props, prevProps)      
         if (this.props.match.params.userId !== prevProps.match.params.userId) {
             const userId = this.props.match.params.userId;
             this.init(userId);
