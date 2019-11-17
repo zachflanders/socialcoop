@@ -23,6 +23,24 @@ exports.createPostValidator = (req, res, next) =>{
     next();
 }
 
+exports.createCommentValidator = (req, res, next) =>{
+    //body
+      req.check('body', "Write a body").notEmpty();
+      req.check('body', "Body must be between 4 and 2000 characters").isLength({
+        min: 4,
+        max: 500
+      });
+      //check for errors
+      const errors = req.validationErrors()
+      //if error show the first one as they happen
+      if(errors){
+        const firstError = errors.map((error)=>error.msg)[0];
+        return res.status(400).json({error: firstError})
+      }
+      //proceed to the next middleware
+      next();
+  }
+
 exports.userSignupValidator = (req, res, next) => {
   //name is not null and between 4-10 characters
   req.check("name","Name is required").notEmpty();

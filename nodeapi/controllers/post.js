@@ -24,7 +24,7 @@ exports.getPostById = (req, res) =>{
 
 exports.getPosts = (req, res) =>{
   const posts = Post.find()
-  .sort('-created ')
+  .sort('-created')
   .populate('postedBy', '_id name')
   .select("_id title body created")
   .then((posts)=> {

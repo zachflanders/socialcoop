@@ -68,7 +68,7 @@ class Post extends Component {
                     
                     <div style={{marginTop:'5px'}}>
                         <Link to={`/user/${posterId}`} style={{textDecoration:'none',color:'#000'}}>{posterName}</Link>
-                        <Typography color='textSecondary' variant='subtitle1'>
+                        <Typography color='textSecondary'>
                             {(post.created && new Date(post.created).toLocaleDateString('en-US', dateOptions))}
                         </Typography>
                     </div>

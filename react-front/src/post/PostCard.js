@@ -6,6 +6,7 @@ import EditIcon from '@material-ui/icons/Edit'
 import DefaultProfile from '../assets/avatar.png';
 import {Link} from 'react-router-dom';
 import { isAuthenticated } from '../auth';
+import Comments from '../comment/Comments'
 
 class PostCardImage extends Component {
     constructor(props){
@@ -65,7 +66,7 @@ const PostCard = (props) =>{
             style={{
                 marginBottom:'10px', 
                 marginRight:'10px',
-                maxWidth: '650px',
+                maxWidth: '700px',
             }}
         >
             <CardHeader
@@ -77,27 +78,27 @@ const PostCard = (props) =>{
                         imgProps={{ onError: (e) => { e.target.src = DefaultProfile; } }}
                         style={{
                             backgroundColor:'#eee',
-                            height: '40px',
-                            width: '40px'
+                            height: '48px',
+                            width: '48px'
                         }}>
                     </Avatar>
                 }
-                action = {post.created ? 
-                    <Typography color='textSecondary' variant='subtitle2' style={{padding:'16px 16px'}}>
+
+                title = {<Link to={`/user/${posterId}`} style={{textDecoration:'none',color:'#000'}}>{posterName}</Link>}
+                titleTypographyProps = {{variant:'h6'}}
+                subheader = {post.created ? 
+                    <Typography color='textSecondary' >
                         {new Date(post.created).toLocaleDateString('en-US', dateOptions)}
                         </Typography>
                     :
                         ''}
-
-                title = {<Link to={`/user/${posterId}`} style={{textDecoration:'none',color:'#000'}}>{posterName}</Link>}
-                titleTypographyProps = {{variant:'subtitle1'}}
-                //subheader = {user.location ? <span><PlaceIcon style={{height:'18px',verticalAlign:'-4'}} />{user.location}</span>: ''}
                 >
             </CardHeader>
             <PostCardImage post={post} />
 
             <CardContent>
-                <Typography variant='h6'>{post.title}</Typography>
+                <Typography variant='h4'>{post.title}</Typography>
+                <br/>
                 {
                     post.body.split('\n').map((item, key) => {
                         return <span key={key}>{item}<br/></span>
@@ -119,10 +120,14 @@ const PostCard = (props) =>{
                         to={`/post/edit/${post._id}`}
                         style={{marginLeft:'auto'}}
                     >
-                        <EditIcon /> Edit
+                        <EditIcon />&nbsp; Edit
                     </Button>
                 )}
             </CardActions>
+            <Divider />
+            <CardContent>
+                <Comments post={post}></Comments>
+            </CardContent>
         </Card>)
 }
 
