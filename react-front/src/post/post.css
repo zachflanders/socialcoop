@@ -4,5 +4,9 @@
     margin-left: auto;
     padding-left: 30px;
     padding-right: 30px;
+}
+
+.post-page-text{
     font-size: 18px;
+    overflow-wrap: break-word;
 }

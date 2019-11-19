@@ -7,6 +7,7 @@ import PlaceIcon from '@material-ui/icons/Place';
 import PostCard from './PostCard';
 import {isAuthenticated} from '../auth';
 import './post.css'
+import Comments from '../comment/Comments'
 
 
 
@@ -66,7 +67,7 @@ class Post extends Component {
                     }}>
                     </Avatar>
                     
-                    <div style={{marginTop:'5px'}}>
+                    <div style={{marginTop:'5px'}} className='post-page-text'>
                         <Link to={`/user/${posterId}`} style={{textDecoration:'none',color:'#000'}}>{posterName}</Link>
                         <Typography color='textSecondary'>
                             {(post.created && new Date(post.created).toLocaleDateString('en-US', dateOptions))}
@@ -75,13 +76,17 @@ class Post extends Component {
                 </Grid>
                 <br/>
                 <Divider />
-                <p>
+                <p className='post-page-text'>
                     {
                         (post.body && post.body.split('\n').map((item, key) => {
                             return <span key={key}>{item}<br/></span>
                         }))
                     }
                 </p>
+                <Divider />
+                <br />
+                {(post._id && <Comments post={post} />)}
+                <br />
 
                 
             </div>

@@ -125,23 +125,26 @@ class Comments extends Component {
                 <br />
                 <CommentList comments={comments} removeComment={this.removeComment} />
                 {(this.state.loading && <div className='dot-flashing' />)}
-                <form style={{display:'flex', width:'100%'}}>
-                    <TextField
-                        id="text"
-                        multiline
-                        label="Add Comment"
-                        style={{flexGrow:1}}
-                        onChange={this.handleChange("text")}
-                        onKeyDown={this.onKeyDown}
-                        value={this.state.text}
-                        style={{width:'100%', paddingRight:'100px'}}
-                    />
-                    <Box style={{position:'relative'}}>
-                        <Button onClick={this.clickSubmit} type='submit' style={{position:'absolute',bottom:0, right:0}}>
-                            Comment
-                        </Button>
-                    </Box>
-                </form>
+                {(isAuthenticated() ? 
+                    <form style={{display:'flex', width:'100%'}}>
+                        <TextField
+                            id="text"
+                            multiline
+                            label="Add Comment"
+                            style={{flexGrow:1}}
+                            onChange={this.handleChange("text")}
+                            onKeyDown={this.onKeyDown}
+                            value={this.state.text}
+                            style={{width:'100%', paddingRight:'100px'}}
+                        />
+                        <Box style={{position:'relative'}}>
+                            <Button onClick={this.clickSubmit} type='submit' style={{position:'absolute',bottom:0, right:0}}>
+                                Comment
+                            </Button>
+                        </Box>
+                    </form>
+                    : <div><Link to='/login'>Login</Link> or <Link to='/signup'>create an account</Link> to comment.</div>
+                )}
                 
             </div>
         )
