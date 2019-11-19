@@ -5,8 +5,8 @@ import EditIcon from '@material-ui/icons/Edit'
 
 import DefaultProfile from '../assets/avatar.png';
 import {Link} from 'react-router-dom';
-import { isAuthenticated } from '../auth';
 import Comments from '../comment/Comments'
+import {isOwner} from '../utils'
 
 class PostCardImage extends Component {
     constructor(props){
@@ -50,10 +50,6 @@ class PostCardImage extends Component {
     }
 
 } 
-
-const isOwner = (id) => {
-    return id === isAuthenticated().user._id
-}
 
 const PostCard = (props) =>{
     const {post} = props

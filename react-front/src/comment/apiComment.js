@@ -23,3 +23,18 @@ export const getComments = (postId) => {
     })
     .catch(err => console.log(err));
 }
+
+export const deleteById = (commentId, token) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/comment/${commentId}`, {
+        method: "DELETE",
+        headers:{
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(response =>{
+        return response.json()
+    })
+    .catch(err => console.log(err));
+}

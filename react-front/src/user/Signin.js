@@ -80,6 +80,7 @@ class Signin extends Component {
         value={password}
         />
     <Button
+      type='submit'
       onClick={this.clickSubmit}
       variant='contained'
       color='primary'>

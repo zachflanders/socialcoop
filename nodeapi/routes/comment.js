@@ -4,6 +4,7 @@ const {
   createComment,
   isCommenter,
   deleteComment,
+  commentById
 } = require("../controllers/comment");
 const {
     postById
@@ -20,11 +21,14 @@ router.post(
   createCommentValidator
 );
 router.get("/comments/:postId", getComments);
-//router.delete("/comment/:commentId", requireSignin, isCommenter, deleteComment)
+
+router.delete("/comment/:commentId", requireSignin, isCommenter, deleteComment)
 
 //any route containing :userId, our app will first execute userById()
 router.param("userId", userById)
 //any route containing :postId, our app will first execute postById()
 router.param("postId", postById)
+
+router.param("commentId", commentById)
 
 module.exports = router;
