@@ -76,7 +76,7 @@ class Comments extends Component {
 
       clickSubmit = event => {
         event.preventDefault();
-        this.setState({loading: true})
+        this.setState({loading: true, text:''})
         if(this.isValid()){
             const userId = isAuthenticated().user._id
             const token = isAuthenticated().token;
@@ -87,11 +87,11 @@ class Comments extends Component {
                     this.setState({error: data.error.message})
                 }
                 else{
-                    console.log('new commnt');
+                    let comments = this.state.comments;
+                    comments.push(data);
                     this.setState({
                         loading:false,
-                        text: '',
-
+                        comments: comments
                     })                
                 }
             });
@@ -116,7 +116,7 @@ class Comments extends Component {
                         onChange={this.handleChange("text")}
                         value={this.state.text}
                     />
-                    <Button onClick={this.clickSubmit}>
+                    <Button onClick={this.clickSubmit} type='submit'>
                         Comment
                     </Button>
                 </form>
