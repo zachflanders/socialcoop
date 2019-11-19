@@ -100,7 +100,7 @@ class PostCard extends Component{
             <Card 
                 style={{
                     marginBottom:'10px', 
-                    marginRight:'10px',
+                    marginRight:'0px',
                     maxWidth: '700px',
                 }}
             >
