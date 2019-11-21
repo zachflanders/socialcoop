@@ -5,13 +5,15 @@ import {Link} from 'react-router-dom';
 import DefaultProfile from '../assets/avatar.png'
 import PlaceIcon from '@material-ui/icons/Place';
 import UserCard from './UserCard';
+import { isAuthenticated } from '../auth';
+import {read} from './apiUser';
 
 
 class Users extends Component {
     constructor(){
         super()
         this.state = {
-            users:[]        
+            users:[],
         }
     }
     componentDidMount(){
@@ -25,18 +27,18 @@ class Users extends Component {
         })
     }
 
-    renderUsers=(users)=>{
+    renderUsers=(users, following)=>{
          return users.map((user, i)=>{
             console.log(user)
             const photoURL = user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : '../assets/avatar.png'
             console.log(user, photoURL)
             return(
-            <UserCard user={user} key={i} />
+            <UserCard user={user} key={i}/>
         )})
     }
 
     render(){
-        const {users} = this.state;
+        const {users, following} = this.state;
         return(
             <div className='container'>
                 <Typography variant='h4'>Directory</Typography> 

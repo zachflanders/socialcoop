@@ -21,7 +21,6 @@ class Profile extends Component {
         this.state = {
             user:{following:[], followers:[]},
             redirectToSignin: false,
-            following: false,
             error: ''
         }
     }
@@ -32,28 +31,6 @@ class Profile extends Component {
         history: PropTypes.object.isRequired
       };
 
-    checkFollower = user => {
-        const jwt = isAuthenticated();
-        const match = user.followers.find(follower => {
-            return follower._id === jwt.user._id
-        })
-        return match
-    }
-
-    clickFollowButton = callApi => {
-        const userId = isAuthenticated().user._id;
-        const token = isAuthenticated().token;
-        callApi(userId, token, this.state.user._id)
-        .then(data=>{
-            if(data.error){
-                this.setState({error: data.error})
-            }
-            else{
-                this.setState({user:data, following: !this.state.following})
-            }
-        })
-    }
-
     init = (userId) => {
         this.setState({user:{following:[], followers:[]}});
         const token = isAuthenticated().token
@@ -63,8 +40,7 @@ class Profile extends Component {
                 this.setState({redirectToSignin: true})
             }
             else{
-                let following = this.checkFollower(data)
-                this.setState({user:data, following})
+                this.setState({user:data})
             }
         })
     }
@@ -126,8 +102,7 @@ class Profile extends Component {
                     ): (user._id && 
                         <div style={{paddingTop:'10px'}}>
                             <FollowProfileButton 
-                                following={this.state.following} 
-                                onButtonClick= {this.clickFollowButton}
+                                user={user} 
                             />
                         </div>)}
                 </div>
@@ -141,7 +116,7 @@ class Profile extends Component {
                         {user.about}
                     </div>
                     <div style={{width:'50%', flexGrow:1}}>
-                        <ProfileTabs userId={user._id} followers={user.followers} following={user.following} />
+                        <ProfileTabs user={user} />
                     </div>
                 </div>
             </div>

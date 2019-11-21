@@ -23,6 +23,19 @@ export const list = () =>{
     .catch(err => console.log(err));
 }
 
+export const getFeed = (userId, token) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/feed/${userId}`, {
+        method: "GET",
+        headers:{
+            Authorization: `Bearer ${token}`
+        },
+    })
+    .then(response =>{
+        return response.json()
+    })
+    .catch(err => console.log(err));
+}
+
 export const getByUserId = (userId) => {
     return fetch(`${process.env.REACT_APP_API_URL}/posts/by/${userId}`, {
         method: "GET",

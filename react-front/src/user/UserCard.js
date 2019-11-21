@@ -3,8 +3,13 @@ import { Button, Tabs, Tab, Paper, AppBar, Toolbar, Avatar, Card, CardHeader, Ca
 import PlaceIcon from '@material-ui/icons/Place'
 import DefaultProfile from '../assets/avatar.png';
 import {Link} from 'react-router-dom';
+import FollowProfileButton from './FollowProfileButton'
+import {isAuthenticated} from '../auth'
+
+
 
 const UserCard = (props) =>{
+    console.log(props);
     const {user} = props
 
     const photoURL =  `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}`;
@@ -37,6 +42,9 @@ const UserCard = (props) =>{
                             >
                                 View Profile
                             </Button>
+                            <FollowProfileButton 
+                                user={user} 
+                            />
                         </CardActions>  
                     </Card>)
 }

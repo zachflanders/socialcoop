@@ -5,6 +5,8 @@ import {isAuthenticated} from '../auth';
 import {read, update, updateUser} from './apiUser';
 import {Redirect} from 'react-router-dom';
 import DeleteUser from './DeleteUser'
+import DefaultProfile from '../assets/avatar.png';
+
 
 
 const styles = theme => ({
@@ -167,13 +169,6 @@ class EditProfile extends Component {
                     
 
                     {loading ? <div>Loading...</div> : ''}
-                </Paper>
-                <Paper style={{maxWidth:'600px', padding:'16px', marginTop:'16px'}}>
-                    <Typography variant='h5' style={{color:'#e74c3c'}}>
-                        Danger Zone
-                    </Typography>
-                    <br/>
-                    <DeleteUser userId={id} />
                 </Paper>
                 <br/>
          

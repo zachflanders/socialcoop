@@ -36,8 +36,9 @@ exports.allUsers = (req, res) => {
         error: err
       })
     }
+    users = users.filter(user=>user.showInDirectory)
     res.json(users);
-  }).select("name email location about updated created")
+  }).select("name email location about updated created showInDirectory followers")
 };
 
 exports.getUser = (req, res) =>{
@@ -99,7 +100,7 @@ exports.userPhoto = (req, res, next)=>{
 }
 
 exports.addFollowing = (req, res, next)=> {
-  console.log('add following')
+  console.log('add following', req.body.userId, req.body.followId)
   User.findByIdAndUpdate(req.body.userId, 
     {$push: {following: req.body.followId}}, (err, result)=>{
       if(err){

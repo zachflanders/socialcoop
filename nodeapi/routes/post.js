@@ -7,10 +7,11 @@ const {getPosts,
   isPoster,
   updatePost,
   deletePost,
-  photo
+  photo,
+  getFeed
 } = require("../controllers/post");
 const {requireSignin} = require("../controllers/auth");
-const {userById} = require("../controllers/user");
+const {userById, hasAuthorization} = require("../controllers/user");
 const {createPostValidator} = require('../validator');
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.post(
   createPostValidator
 );
 router.get("/posts/by/:userId", postsByUser);
+router.get("/feed/:userId", requireSignin, hasAuthorization, getFeed)
 router.get("/post/:postId", getPostById);
 router.put("/post/:postId", requireSignin, isPoster, updatePost)
 router.delete("/post/:postId", requireSignin, isPoster, deletePost)

@@ -42,7 +42,11 @@ const userSchema = new mongoose.Schema({
   }],
   followers: [{
     type: ObjectId, ref:"User"
-  }]    
+  }],
+  showInDirectory: {
+    type: Boolean,
+    default: false
+  }
 });
 
 //virtual field

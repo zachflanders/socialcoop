@@ -5,6 +5,7 @@ import Home from './core/Home';
 import Signup from './user/Signup';
 import Signin from './user/Signin';
 import Profile from './user/Profile';
+import Settings from './user/Settings';
 import Users from './user/Users';
 import EditProfile from './user/EditProfile';
 import PrivateRoute from './auth/PrivateRoute';
@@ -31,7 +32,7 @@ const MainRouter = () => (
       <PrivateRoute exact path='/post/create' component={NewPost}></PrivateRoute>
       <PrivateRoute exact path='/post/edit/:postId' component={EditPost}></PrivateRoute>
       <Route exact path='/post/:postId' component={Post}></Route>
-
+      <PrivateRoute exact path='/user/:userId/settings' component={Settings}></PrivateRoute>
       <PrivateRoute exact path='/user/:userId' component={Profile}></PrivateRoute>
       <PrivateRoute exact path='/user/edit/:userId' component={EditProfile}></PrivateRoute>
 

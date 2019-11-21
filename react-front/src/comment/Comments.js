@@ -90,12 +90,19 @@ class Comments extends Component {
                     this.setState({error: data.error.message})
                 }
                 else{
-                    let comments = this.state.comments;
-                    comments.push(data);
-                    this.setState({
-                        loading:false,
-                        comments: comments
-                    })                
+                    getComments(postId)
+                    .then(data =>{
+                        if(data.error){
+                            console.log(data)
+                        }
+                        else{
+                            console.log(data)
+                            this.setState({
+                                comments:data,
+                                loading: false,
+                            })
+                        }
+                    })              
                 }
             });
         }

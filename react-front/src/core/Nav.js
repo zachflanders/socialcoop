@@ -129,7 +129,16 @@ class Nav extends React.Component {
                     onClick={this.handleClose}
                     component={Link}
                     to={`/user/${isAuthenticated().user._id}`}
-                  >{isAuthenticated().user.name}</MenuItem>
+                    >
+                      Profile
+                    </MenuItem>
+                  <MenuItem 
+                    onClick={this.handleClose}
+                    component={Link}
+                    to={`/user/${isAuthenticated().user._id}/settings`}
+                    >
+                      Settings
+                    </MenuItem>
                   <MenuItem onClick={()=>{this.handleClose(()=>logout(()=>{history.push('/')}))}}>Logout</MenuItem>
                 </Menu>
               </div>

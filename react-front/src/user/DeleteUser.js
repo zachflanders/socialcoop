@@ -53,7 +53,7 @@ class DeleteUser extends Component {
                 }}
              >
                 <DeleteIcon />&nbsp;
-                Delete Profile
+                Delete Account
             </Button>
         )
         

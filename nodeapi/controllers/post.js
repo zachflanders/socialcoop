@@ -18,12 +18,30 @@ exports.postById = (req, res, next, id) =>{
   }) 
 }
 
-exports.getPostById = (req, res) =>{
+exports.getPostById = (req, res) => {
     res.json(req.post);
 }
 
-exports.getPosts = (req, res) =>{
+exports.getPosts = (req, res) => {
   const posts = Post.find()
+  .sort('-created')
+  .populate('postedBy', '_id name')
+  .select("_id title body created")
+  .then((posts)=> {
+    res.json(posts);
+  })
+  .catch(err => console.log(err));
+}
+
+exports.getFeed = (req, res) => {
+  console.log('getting feed', req.profile.following)
+
+  following = req.profile.following.map(user => user._id)
+  following.push(req.profile._id)
+  console.log(following)
+  const posts = Post.find({
+    postedBy: { $in: following }
+  })
   .sort('-created')
   .populate('postedBy', '_id name')
   .select("_id title body created")

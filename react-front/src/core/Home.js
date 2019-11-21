@@ -12,6 +12,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faNewspaper, faUsers } from '@fortawesome/free-solid-svg-icons'
 import Posts from '../post/Posts';
+import Feed from '../post/Feed';
 
 
 
@@ -85,7 +86,7 @@ const Home = () => (
       Hello, {isAuthenticated().user.name}
       <br/>
       <br />
-      <Posts />
+      <Feed />
     </div>
   )}
 
