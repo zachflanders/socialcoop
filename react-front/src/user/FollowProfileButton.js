@@ -66,7 +66,7 @@ class FollowProfileButton extends Component {
     render(){
         return(
             <div>
-                {(!this.state.loading && this.props.user._id !== isAuthenticated().user._id &&
+                {(!this.state.loading && isAuthenticated() && this.props.user._id !== isAuthenticated().user._id &&
                 (!this.state.following ? 
 
                 <Button
