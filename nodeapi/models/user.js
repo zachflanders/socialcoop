@@ -46,6 +46,10 @@ const userSchema = new mongoose.Schema({
   showInDirectory: {
     type: Boolean,
     default: false
+  },
+  resetPasswordLink: {
+    data: String,
+    default: ""
   }
 });
 

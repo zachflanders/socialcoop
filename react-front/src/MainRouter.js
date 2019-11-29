@@ -12,6 +12,8 @@ import PrivateRoute from './auth/PrivateRoute';
 import NewPost from './post/NewPost';
 import EditPost from './post/EditPost';
 import Post from './post/Post';
+import ForgotPassword from "./user/ForgotPassword";
+import ResetPassword from "./user/ResetPassword";
 
 
 const toggleDrawer = () => {
@@ -26,6 +28,12 @@ const MainRouter = () => (
     />
     <Switch>
       <Route exact path='/' component={Home}></Route>
+      <Route exact path="/forgot-password" component={ForgotPassword} />
+      <Route
+        exact
+        path="/reset-password/:resetPasswordToken"
+        component={ResetPassword}
+      />
       <Route exact path='/users' component={Users}></Route>
       <Route exact path='/signup' component={Signup}></Route>
       <Route exact path='/login' component={Signin}></Route>
