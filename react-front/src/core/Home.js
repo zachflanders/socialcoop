@@ -8,11 +8,13 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import {Box} from '@material-ui/core'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faNewspaper, faUsers } from '@fortawesome/free-solid-svg-icons'
 import Posts from '../post/Posts';
 import Feed from '../post/Feed';
+import SidebarNav from '../core/SidebarNav';
 
 
 
@@ -82,12 +84,10 @@ const Home = () => (
     </div>
   )}
   {isAuthenticated() && (
-    <div className = 'container'>
-      Hello, {isAuthenticated().user.name}
-      <br/>
-      <br />
+    <Box display="flex" justifyContent="center" className='container'>
+      <SidebarNav/>
       <Feed />
-    </div>
+    </Box>
   )}
 
   </div>

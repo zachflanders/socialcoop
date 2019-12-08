@@ -22,29 +22,46 @@ exports.getPostById = (req, res) => {
     res.json(req.post);
 }
 
-exports.getPosts = (req, res) => {
-  const posts = Post.find()
-  .sort('-created')
-  .populate('postedBy', '_id name')
-  .select("_id title body created")
+exports.getPosts = async (req, res) => {
+  const currentPage = req.query.page || 1;
+  const perPage = 3;
+  let totalItems;
+  const posts = await Post.find()
+  .countDocuments()
+  .then(count => {
+    totalItems = count;
+    return Post.find()
+        .skip((currentPage - 1) * perPage)
+        .populate("postedBy", "_id name")
+        .sort('-created')
+        .limit(perPage)
+        .select("_id title body created");
+})
   .then((posts)=> {
     res.json(posts);
   })
   .catch(err => console.log(err));
 }
 
-exports.getFeed = (req, res) => {
-  console.log('getting feed', req.profile.following)
-
+exports.getFeed = async (req, res) => {
+  const currentPage = req.query.page || 1;
+  const perPage = 3;
+  let totalItems;
   following = req.profile.following.map(user => user._id)
   following.push(req.profile._id)
-  console.log(following)
-  const posts = Post.find({
-    postedBy: { $in: following }
-  })
-  .sort('-created')
-  .populate('postedBy', '_id name')
-  .select("_id title body created")
+  const posts = await Post.find()
+  .countDocuments()
+  .then(count => {
+    totalItems = count;
+    return Post.find({
+      postedBy: { $in: following }
+    })
+    .skip((currentPage - 1) * perPage)
+    .sort('-created')
+    .limit(perPage)
+    .populate('postedBy', '_id name')
+    .select("_id title body created")
+  }) 
   .then((posts)=> {
     res.json(posts);
   })

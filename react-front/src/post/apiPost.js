@@ -13,8 +13,8 @@ export const create = (userId, token, post) =>{
     .catch(err => console.log(err));
 }
 
-export const list = () =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/posts`, {
+export const list = (page) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/posts/?page=${page}`, {
         method: "GET",
     })
     .then(response =>{
@@ -23,8 +23,8 @@ export const list = () =>{
     .catch(err => console.log(err));
 }
 
-export const getFeed = (userId, token) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/feed/${userId}`, {
+export const getFeed = (userId, token, page) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/feed/${userId}/?page=${page}`, {
         method: "GET",
         headers:{
             Authorization: `Bearer ${token}`

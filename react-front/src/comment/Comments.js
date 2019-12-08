@@ -25,14 +25,12 @@ class Comments extends Component {
 
     }
     init = (postId) => {
-        console.log(`getting post ${postId}`)
         getById(postId)
         .then(data =>{
             if(data.error){
                 console.log(data)
             }
             else{
-                console.log(data)
                 this.setState({
                     post:data,
                     user:isAuthenticated().user
@@ -45,7 +43,6 @@ class Comments extends Component {
                 console.log(data)
             }
             else{
-                console.log(data)
                 this.setState({
                     comments:data,
                     loading: false,
@@ -161,7 +158,6 @@ class Comments extends Component {
 export default Comments
 
 const deleteComment = (comment, callback) =>{     
-    console.log('delete comment', comment)           
     const token = isAuthenticated().token;
     const commentId = comment._id;
     deleteById(commentId, token)
@@ -180,7 +176,7 @@ const CommentList = (props) => {
     if(props.comments.length > 0) {
         return props.comments.map(comment => {
             return(
-                <div style={{marginBottom:'30px'}}>
+                <div style={{marginBottom:'30px'}} key={comment._id}>
                     
                     <div style={{display:'flex'}}>
                         <div style={{display:'flex', flexGrow:'1'}}>

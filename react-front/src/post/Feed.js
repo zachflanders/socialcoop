@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useRef} from 'react';
 import {list, getByUserId, getFeed} from './apiPost';
 import { Card, CardActions, Button, Typography, Avatar, CardHeader, CardContent } from '@material-ui/core';
 import {Link} from 'react-router-dom';
@@ -12,13 +12,16 @@ class Feed extends Component {
     constructor(props){
         super(props)
         this.state = {
+            user: null,
             loading: true,
-            posts:[]        
+            posts:[],
+            page: 1,        
         }
     }
-    componentDidMount(){
-        const user = isAuthenticated()
-        getFeed(user.user._id, user.token).then(data =>{
+
+    loadFeed = (user, page) => {
+        this.setState({posts:[], loading:true});
+        getFeed(user.user._id, user.token, page).then(data =>{
             console.log(data);
             if(data.error){
                 console.log(data.error)
@@ -28,6 +31,23 @@ class Feed extends Component {
             }
         })
     }
+
+    loadMore = (user, number) => {
+        this.setState({ page: this.state.page + number });
+        this.loadFeed(user, this.state.page + number);
+    };
+ 
+    loadLess = (user, number) => {
+        this.setState({ page: this.state.page - number });
+        this.loadFeed(user, this.state.page - number);
+    };
+
+    componentDidMount(){
+        let user = isAuthenticated()
+        this.setState({user:user})
+        this.loadFeed(user, this.state.page)
+        
+    }
     renderFeed=(posts)=>{
         if(posts.length == 0 && !this.state.loading){
             return (
@@ -36,9 +56,9 @@ class Feed extends Component {
                 </div>
             )
         }
-        return posts.map((post, i)=>{
+        return posts.map((post)=>{
             return(
-                <PostCard post={post} key={i} />
+                <PostCard post={post} key={post._id} />
             )
         })
 
@@ -46,13 +66,26 @@ class Feed extends Component {
     }
 
     render(){
-        const {posts} = this.state;
+        const {posts, user} = this.state;
         return(
             <div>
                 <div>
                     {(this.state.loading && <div className='dot-flashing' />)}
-
                     {this.renderFeed(posts)}
+                    {(this.state.page > 1 && 
+                        <Button
+                            onClick={() => this.loadLess(user, 1)}
+                        >
+                            Previous
+                        </Button>
+                    )}
+                    {(posts.length > 0 && 
+                        <Button
+                            onClick={() => this.loadMore(user, 1)}
+                        >
+                            Next
+                        </Button>
+                     )}
                 </div>
                 
             </div>

@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 const uuidv1 = require('uuid/v1');
 const crypto = require('crypto');
 const { ObjectId } = mongoose.Schema;
+const _ = require("lodash");
+const { sendEmail } = require("../helpers");
+// load env
+const dotenv = require("dotenv");
+dotenv.config();
 
 const userSchema = new mongoose.Schema({
   name:{
