@@ -19,7 +19,7 @@ import SidebarNav from '../core/SidebarNav';
 
 
 const Home = () => (
-  <div>
+  <div >
   {!isAuthenticated() && (
     <div className='container' style={{display:'flex', flexWrap:'wrap'}}>
       <div style={{flexGrow:1, width:'500px', minWidth:'350px', marginRight:'24px', marginBottom:'24px'}}>
@@ -84,8 +84,8 @@ const Home = () => (
     </div>
   )}
   {isAuthenticated() && (
-    <Box display="flex" justifyContent="center" className='container'>
-      <SidebarNav/>
+    <Box display="flex" style={{paddingLeft:'16px'}}>
+      <SidebarNav />
       <Feed />
     </Box>
   )}

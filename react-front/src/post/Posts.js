@@ -13,7 +13,8 @@ class Posts extends Component {
     constructor(props){
         super(props)
         this.state = {
-            posts:[]        
+            posts:[],
+            loading: true        
         }
     }
     componentDidMount(){
@@ -22,7 +23,7 @@ class Posts extends Component {
                 console.log(data.error)
             }
             else{
-                this.setState({posts:data})
+                this.setState({posts:data, loading: false})
             }
         })  
     }
@@ -41,6 +42,7 @@ class Posts extends Component {
         return(
             <div>
                 <div style={{}}>
+                    {(this.state.loading && <div className='dot-flashing' />)}
                     {this.renderPosts(posts)}
                 </div>
                 

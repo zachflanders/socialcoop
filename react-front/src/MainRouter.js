@@ -14,19 +14,21 @@ import EditPost from './post/EditPost';
 import Post from './post/Post';
 import ForgotPassword from "./user/ForgotPassword";
 import ResetPassword from "./user/ResetPassword";
+import SidebarNav from './core/SidebarNav';
+import {Box} from '@material-ui/core'
+import { isAuthenticated } from './auth';
 
 
 const toggleDrawer = () => {
   return null
 }
 
-
 const MainRouter = () => (
   <div>
     <Nav 
       toggleDrawer = {toggleDrawer}
     />
-    <Switch>
+    <Switch >
       <Route exact path='/' component={Home}></Route>
       <Route exact path="/forgot-password" component={ForgotPassword} />
       <Route
@@ -43,7 +45,6 @@ const MainRouter = () => (
       <PrivateRoute exact path='/user/:userId/settings' component={Settings}></PrivateRoute>
       <PrivateRoute exact path='/user/:userId' component={Profile}></PrivateRoute>
       <PrivateRoute exact path='/user/edit/:userId' component={EditProfile}></PrivateRoute>
-
     </Switch>
   </div>
 )

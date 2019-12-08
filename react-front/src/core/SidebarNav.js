@@ -31,7 +31,7 @@ class SidebarNav extends React.Component {
     const photoURL = isAuthenticated() ? `${process.env.REACT_APP_API_URL}/user/photo/${isAuthenticated().user._id }?${new Date().getTime()}` : '../assets/avatar.png'
 
     return (
-      <div style={{marginRight: '15px', minWidth:'200px', width:'280px'}} className='desktop'>
+      <div style={{marginRight: '16px', minWdith:'280px', width:'280px'}} className='desktop'>
         <Button
             color="primary"
             variant='contained'

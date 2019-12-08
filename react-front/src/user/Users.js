@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {list} from './apiUser';
-import { Card, CardActions, Button, Typography, Avatar, CardHeader, CardContent } from '@material-ui/core';
+import { Card, CardActions, Button, Typography, Avatar, CardHeader, CardContent, Box } from '@material-ui/core';
 import {Link} from 'react-router-dom';
 import DefaultProfile from '../assets/avatar.png'
 import PlaceIcon from '@material-ui/icons/Place';
 import UserCard from './UserCard';
 import { isAuthenticated } from '../auth';
 import {read} from './apiUser';
+import SidebarNav from '../core/SidebarNav'
 
 
 class Users extends Component {
@@ -14,6 +15,7 @@ class Users extends Component {
         super()
         this.state = {
             users:[],
+            loading: true,
         }
     }
     componentDidMount(){
@@ -22,7 +24,7 @@ class Users extends Component {
                 console.log(data.error)
             }
             else{
-                this.setState({users:data})
+                this.setState({users:data, loading:false})
             }
         })
     }
@@ -40,14 +42,18 @@ class Users extends Component {
     render(){
         const {users, following} = this.state;
         return(
-            <div className='container'>
-                <Typography variant='h4'>Directory</Typography> 
-                <br />
-                <div style={{display:'flex', flexWrap:'wrap'}}>
-                    {this.renderUsers(users)}
+            <Box display="flex" style={{paddingLeft:'16px'}}>
+                <SidebarNav />
+                <div style={{width:'100%', paddingRight:'16px'}}>
+                    <Typography variant='h4'>Directory</Typography> 
+                    <br />
+                    <div style={{display:'flex', flexWrap:'wrap'}}>
+                        {(this.state.loading && <div className='dot-flashing' />)}
+                        {this.renderUsers(users)}
+                    </div>
                 </div>
                 
-            </div>
+            </Box>
         )
     }
 }
