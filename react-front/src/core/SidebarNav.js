@@ -31,13 +31,13 @@ class SidebarNav extends React.Component {
     const photoURL = isAuthenticated() ? `${process.env.REACT_APP_API_URL}/user/photo/${isAuthenticated().user._id }?${new Date().getTime()}` : '../assets/avatar.png'
 
     return (
-      <div style={{marginRight: '16px', minWdith:'280px', width:'280px'}} className='desktop'>
+      <div style={{marginRight: '16px', minWidth:'260px', width:'260px'}} className='desktop'>
         <Button
             color="primary"
             variant='contained'
             component = {Link}
             to='/post/create'
-            style= {{width:'100%', minPadding:'20px'}} 
+            style= {{width:'100%'}} 
             startIcon={<AddIcon />}
         >
             Create Post

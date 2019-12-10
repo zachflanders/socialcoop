@@ -68,7 +68,7 @@ class Feed extends Component {
     render(){
         const {posts, user} = this.state;
         return(
-            <div style={{width:'100%', paddingRight:'16px'}}>
+            <div style={{paddingRight:'16px', width:'700px', flexShrink:1}}>
                 <div>
                     {(this.state.loading && <div className='dot-flashing' />)}
                     {this.renderFeed(posts)}

@@ -8,13 +8,16 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import {Box} from '@material-ui/core'
+import {Box, Paper} from '@material-ui/core'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faNewspaper, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faNewspaper, faUsers, faBullhorn } from '@fortawesome/free-solid-svg-icons'
 import Posts from '../post/Posts';
 import Feed from '../post/Feed';
 import SidebarNav from '../core/SidebarNav';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+
+
 
 
 
@@ -87,6 +90,14 @@ const Home = () => (
     <Box display="flex" style={{paddingLeft:'16px'}}>
       <SidebarNav />
       <Feed />
+      <div style={{width:'260px', marginLeft:'0px', marginRight:'16px'}} className='desktop'>
+      <Box style={{paddingRight:'16px'}}>
+        <Paper style={{padding:'16px', width:'228px', background:'#c8e6c9'}}>
+        <FontAwesomeIcon icon={faBullhorn} />&nbsp;&nbsp;
+          Welcome to the alpha preview of myCoop.
+        </Paper>
+        </Box>
+        </div>
     </Box>
   )}
 
