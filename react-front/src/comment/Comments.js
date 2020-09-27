@@ -25,14 +25,12 @@ class Comments extends Component {
 
     }
     init = (postId) => {
-        console.log(`getting post ${postId}`)
         getById(postId)
         .then(data =>{
             if(data.error){
                 console.log(data)
             }
             else{
-                console.log(data)
                 this.setState({
                     post:data,
                     user:isAuthenticated().user
@@ -45,7 +43,6 @@ class Comments extends Component {
                 console.log(data)
             }
             else{
-                console.log(data)
                 this.setState({
                     comments:data,
                     loading: false,
@@ -90,12 +87,19 @@ class Comments extends Component {
                     this.setState({error: data.error.message})
                 }
                 else{
-                    let comments = this.state.comments;
-                    comments.push(data);
-                    this.setState({
-                        loading:false,
-                        comments: comments
-                    })                
+                    getComments(postId)
+                    .then(data =>{
+                        if(data.error){
+                            console.log(data)
+                        }
+                        else{
+                            console.log(data)
+                            this.setState({
+                                comments:data,
+                                loading: false,
+                            })
+                        }
+                    })              
                 }
             });
         }
@@ -125,23 +129,26 @@ class Comments extends Component {
                 <br />
                 <CommentList comments={comments} removeComment={this.removeComment} />
                 {(this.state.loading && <div className='dot-flashing' />)}
-                <form style={{display:'flex', width:'100%'}}>
-                    <TextField
-                        id="text"
-                        multiline
-                        label="Add Comment"
-                        style={{flexGrow:1}}
-                        onChange={this.handleChange("text")}
-                        onKeyDown={this.onKeyDown}
-                        value={this.state.text}
-                        style={{width:'100%', paddingRight:'100px'}}
-                    />
-                    <Box style={{position:'relative'}}>
-                        <Button onClick={this.clickSubmit} type='submit' style={{position:'absolute',bottom:0, right:0}}>
-                            Comment
-                        </Button>
-                    </Box>
-                </form>
+                {(isAuthenticated() ? 
+                    <form style={{display:'flex', width:'100%'}}>
+                        <TextField
+                            id="text"
+                            multiline
+                            label="Add Comment"
+                            style={{flexGrow:1}}
+                            onChange={this.handleChange("text")}
+                            onKeyDown={this.onKeyDown}
+                            value={this.state.text}
+                            style={{width:'100%', paddingRight:'100px'}}
+                        />
+                        <Box style={{position:'relative'}}>
+                            <Button onClick={this.clickSubmit} type='submit' style={{position:'absolute',bottom:0, right:0}}>
+                                Comment
+                            </Button>
+                        </Box>
+                    </form>
+                    : <div><Link to='/login'>Login</Link> or <Link to='/signup'>create an account</Link> to comment.</div>
+                )}
                 
             </div>
         )
@@ -151,7 +158,6 @@ class Comments extends Component {
 export default Comments
 
 const deleteComment = (comment, callback) =>{     
-    console.log('delete comment', comment)           
     const token = isAuthenticated().token;
     const commentId = comment._id;
     deleteById(commentId, token)
@@ -170,7 +176,7 @@ const CommentList = (props) => {
     if(props.comments.length > 0) {
         return props.comments.map(comment => {
             return(
-                <div style={{marginBottom:'30px'}}>
+                <div style={{marginBottom:'30px'}} key={comment._id}>
                     
                     <div style={{display:'flex'}}>
                         <div style={{display:'flex', flexGrow:'1'}}>

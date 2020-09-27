@@ -13,34 +13,19 @@ class Posts extends Component {
     constructor(props){
         super(props)
         this.state = {
-            posts:[]        
+            posts:[],
+            loading: true        
         }
     }
     componentDidMount(){
-        console.log(this.props)
-        if(this.props.userId) {
-            console.log(`getting posts for ${this.props.userId}`)
-            getByUserId(this.props.user).then(data => {
-                if(data.error){
-                    console.log(data.error)
-                }
-                else{
-                    console.log(data)
-                    this.setState({posts:data})
-                }
-            })
-        }
-        else{
-            list().then(data =>{
-                if(data.error){
-                    console.log(data.error)
-                }
-                else{
-                    this.setState({posts:data})
-                }
-            })
-        }
-        
+        list().then(data =>{
+            if(data.error){
+                console.log(data.error)
+            }
+            else{
+                this.setState({posts:data, loading: false})
+            }
+        })  
     }
 
 
@@ -57,6 +42,7 @@ class Posts extends Component {
         return(
             <div>
                 <div style={{}}>
+                    {(this.state.loading && <div className='dot-flashing' />)}
                     {this.renderPosts(posts)}
                 </div>
                 

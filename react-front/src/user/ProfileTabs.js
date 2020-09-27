@@ -19,21 +19,21 @@ class ProfileTabs extends Component {
     }
 
     renderPostsTab = () =>{
-        const  {userId, followers} = this.props;
+        const  {user} = this.props;
         return (
             <div>
                 <br />
-                <UserPosts userId={userId}/>
+                <UserPosts userId={user._id}/>
             </div>
             
         )
     }
 
     renderFollowersTab = () => {
-        const  {following, followers} = this.props;
+        const  {user} = this.props;
         return (
             <div style={{paddingTop:'20px', display:'flex', flexWrap:'wrap'}}>
-                {followers.map((follower, i)=>{
+                {user.followers.map((follower, i)=>{
                     return (
                         <UserCard user={follower} key={i} />
                 )})}
@@ -42,10 +42,12 @@ class ProfileTabs extends Component {
     }
 
     renderFollowingTab = () => {
-        const  {following, followers} = this.props;
+        const  {user} = this.props;
+        console.log(user)
+
         return (
             <div style={{paddingTop:'20px', display:'flex', flexWrap:'wrap'}}>
-                {following.map((follower, i)=>{
+                {user.following.map((follower, i)=>{
                     const photoURL =  `${process.env.REACT_APP_API_URL}/user/photo/${follower._id}?${new Date().getTime()}`;
                     return (
                         <UserCard user={follower} key={i} />

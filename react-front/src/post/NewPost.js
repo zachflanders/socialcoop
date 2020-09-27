@@ -24,7 +24,8 @@ class NewPost extends Component {
             error:'',
             user:{},
             fileSize:0,
-            loading: false
+            loading: false,
+            photoURL: '',
         }
     }
 
@@ -36,10 +37,57 @@ class NewPost extends Component {
 
     handleChange = (name) => (event) => {
         this.setState({error:''});
-        const value = name === "photo" ? event.target.files[0] : event.target.value;
-        const fileSize = name === "photo" ? event.target.files[0].size : 0;
-        this.postData.set(name, value)
-        this.setState({[name]: value, fileSize})
+        if(name==='photo'){
+            console.log('photo')
+            const reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
+            reader.onload = event => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const elem = document.createElement('canvas');
+                    const maxSize = 800;
+                    console.log(img)
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height *= maxSize / width;
+                            width = maxSize;
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width *= maxSize / height;
+                            height = maxSize;
+                        }
+                    }
+                    elem.width = width;
+                    elem.height = height;
+                    const ctx = elem.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    console.log(ctx);
+                    const dataUrl = ctx.canvas.toDataURL('image/jpeg');
+                    ctx.canvas.toBlob((blob)=>{
+                        console.log(blob, dataUrl)
+                        this.postData.set(name, blob)
+                        this.setState({
+                            [name]:blob,
+                            photoURL: dataUrl,
+                            fileSize: blob.size
+                        });
+                        console.log(this.state)    
+                    });
+                }
+                reader.onerror = error => console.log(error);
+            }
+        }
+        else{
+            const value =  event.target.value;
+            const fileSize =  0;
+            this.postData.set(name, value)
+            this.setState({[name]: value, fileSize})
+        }
+        
       };
 
 
@@ -97,6 +145,7 @@ class NewPost extends Component {
             onChange={this.handleChange("title")}
             value={title}
             />
+            <img src={this.state.photoURL} alt='' width='100%'/>
             <input
                 onChange = {this.handleChange("photo")}
                 accept="image/*"

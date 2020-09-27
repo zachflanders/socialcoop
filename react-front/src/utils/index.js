@@ -1,7 +1,11 @@
 import { isAuthenticated } from '../auth';
 
 const isOwner = (id) => {
-    return id === isAuthenticated().user._id
+    if (isAuthenticated()){
+        return id === isAuthenticated().user._id
+    }
+    return false
+    
 }
 
 export {isOwner};

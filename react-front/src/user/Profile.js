@@ -5,13 +5,13 @@ import {Redirect, withRouter} from 'react-router-dom'
 import {read} from './apiUser';
 import {Link} from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import { Typography, Avatar, Divider } from '@material-ui/core';
+import { Typography, Avatar, Divider, Box } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaceIcon from '@material-ui/icons/Place';
 import FollowProfileButton from './FollowProfileButton'
 import ProfileTabs from './ProfileTabs'
 import DefaultProfile from '../assets/avatar.png';
-
+import SidebarNav from '../core/SidebarNav'
 
 let photoURL = undefined;
 
@@ -21,7 +21,6 @@ class Profile extends Component {
         this.state = {
             user:{following:[], followers:[]},
             redirectToSignin: false,
-            following: false,
             error: ''
         }
     }
@@ -32,28 +31,6 @@ class Profile extends Component {
         history: PropTypes.object.isRequired
       };
 
-    checkFollower = user => {
-        const jwt = isAuthenticated();
-        const match = user.followers.find(follower => {
-            return follower._id === jwt.user._id
-        })
-        return match
-    }
-
-    clickFollowButton = callApi => {
-        const userId = isAuthenticated().user._id;
-        const token = isAuthenticated().token;
-        callApi(userId, token, this.state.user._id)
-        .then(data=>{
-            if(data.error){
-                this.setState({error: data.error})
-            }
-            else{
-                this.setState({user:data, following: !this.state.following})
-            }
-        })
-    }
-
     init = (userId) => {
         this.setState({user:{following:[], followers:[]}});
         const token = isAuthenticated().token
@@ -63,8 +40,7 @@ class Profile extends Component {
                 this.setState({redirectToSignin: true})
             }
             else{
-                let following = this.checkFollower(data)
-                this.setState({user:data, following})
+                this.setState({user:data})
             }
         })
     }
@@ -90,7 +66,9 @@ class Profile extends Component {
         if(redirectToSignin) return <Redirect to="/login" />
         const { match, location, history } = this.props;
         return(
-            <div className = 'container'>
+            <Box display="flex" style={{paddingLeft:'16px'}}>
+                <SidebarNav />
+                <div style={{width:'100%', paddingRight:'16px'}}>
                 <div style={{display:'flex', flexWrap:'wrap'}}>
                     <Avatar 
                         src={photoURL}
@@ -100,9 +78,9 @@ class Profile extends Component {
                             width:'80px', 
                             height:'80px',
                             backgroundColor:'#eee'
-                    }}
+                        }}
                     />
-                    <div style={{flexGrow:'1', padding:'10px'}}>                
+                    <div style={{padding:'10px', flexGrow:1}}>                
                         <Typography variant='h4' >
                             {user.name}
                         </Typography> 
@@ -126,25 +104,25 @@ class Profile extends Component {
                     ): (user._id && 
                         <div style={{paddingTop:'10px'}}>
                             <FollowProfileButton 
-                                following={this.state.following} 
-                                onButtonClick= {this.clickFollowButton}
+                                user={user} 
                             />
                         </div>)}
                 </div>
                 <br />
                 <Divider/>
                 <br/>
-                <div style={{display:'flex', flexWrap:'wrap'}}>
-                    <div style={{width:'15%', minWidth:'300px', fontSize:'14px', padding:'0px 20px 0px 0px'}}>
+                <div>
+                    <div style={{fontSize:'14px'}}>
                         Joined {user.created ? `${new Date(user.created).toLocaleDateString('en-US', dateOptions)}`:''} 
                         <br />
                         {user.about}
                     </div>
-                    <div style={{width:'50%', flexGrow:1}}>
-                        <ProfileTabs userId={user._id} followers={user.followers} following={user.following} />
+                    <div >
+                        <ProfileTabs user={user} />
                     </div>
                 </div>
-            </div>
+                </div>
+            </Box>
         )
     }
 }

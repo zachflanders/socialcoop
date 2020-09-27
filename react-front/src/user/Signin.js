@@ -97,12 +97,24 @@ class Signin extends Component {
     }
     return(
       <div>
-        <Paper className='centered padded' style={{width:'350px'}}>
+        <Paper className='centered padded' style={{maxWidth:'350px'}}>
           <Typography variant="h5" component="h2" style={{textAlign:'center'}}>Login</Typography>
           {loading ? <div style={{textAlign:'center'}}>Loading...</div> : ""}
           {this.signinForm(email, password, classes)}
           <br />
-          <Typography variant='caption' color='textSecondary' style={{textAlign:'center'}}>Don't have an account?  <Link to='/signup' style={{color:"rgba(0, 0, 0, 0.54)"}}>Create</Link></Typography>
+          <Typography variant='caption' color='textSecondary' style={{textAlign:'center'}}>
+            Don't have an account?&nbsp;
+            <Link to='/signup' style={{color:"rgba(0, 0, 0, 0.54)"}}>
+              Create one
+            </Link>.
+          </Typography>
+          <br/>
+          <Typography variant='caption' color='textSecondary' style={{textAlign:'center'}}>
+            <Link to="/forgot-password" style={{color:"rgba(0, 0, 0, 0.54)"}}>
+             {" "}
+              Forgot Password?
+            </Link>
+            </Typography>
         </Paper>
         <Snackbar
           open={this.state.error}

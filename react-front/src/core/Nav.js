@@ -77,9 +77,6 @@ class Nav extends React.Component {
               <Typography component={Link} to='/' variant="h6" color="inherit" style={{textDecoration:'none', marginRight:'20px'}}>
                 myCoop
               </Typography>
-              {isAuthenticated() && (
-                <Button component={Link} to='/users' color="inherit" className='desktop'>Directory</Button>
-              )}
             </div>
             {!isAuthenticated() && (
               <Button component={Link} to='/login' color="inherit">Login</Button>
@@ -88,15 +85,6 @@ class Nav extends React.Component {
               <>
                 
               <div>
-              <Button
-                  color="inherit"
-                  component = {Link}
-                  to='/post/create'  
-                  style={{marginRight:'8px'}}
-                  className='desktop'
-                >
-                  <AddIcon /> Create Post
-                </Button>
                 <IconButton
                   aria-owns={open ? 'menu-appbar' : undefined}
                   aria-haspopup="true"
@@ -129,7 +117,16 @@ class Nav extends React.Component {
                     onClick={this.handleClose}
                     component={Link}
                     to={`/user/${isAuthenticated().user._id}`}
-                  >{isAuthenticated().user.name}</MenuItem>
+                    >
+                      Profile
+                    </MenuItem>
+                  <MenuItem 
+                    onClick={this.handleClose}
+                    component={Link}
+                    to={`/user/${isAuthenticated().user._id}/settings`}
+                    >
+                      Settings
+                    </MenuItem>
                   <MenuItem onClick={()=>{this.handleClose(()=>logout(()=>{history.push('/')}))}}>Logout</MenuItem>
                 </Menu>
               </div>

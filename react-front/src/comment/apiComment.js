@@ -14,7 +14,6 @@ export const comment = (userId, token, postId, comment) =>{
 }
 
 export const getComments = (postId) => {
-    console.log('getting comments')
     return fetch(`${process.env.REACT_APP_API_URL}/comments/${postId}`, {
         method: "GET",
     })

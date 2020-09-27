@@ -5,6 +5,8 @@ import {isAuthenticated} from '../auth';
 import {read, update, updateUser} from './apiUser';
 import {Redirect} from 'react-router-dom';
 import DeleteUser from './DeleteUser'
+import DefaultProfile from '../assets/avatar.png';
+
 
 
 const styles = theme => ({
@@ -26,7 +28,9 @@ class EditProfile extends Component {
             loading: false,
             fileSize: 0,
             about:'',
-            location:''
+            location:'',
+            photo: null,
+            photoURL: '',
         }
     }
 
@@ -42,7 +46,8 @@ class EditProfile extends Component {
                     id: data._id, 
                     name: data.name, 
                     about:data.about,
-                    location: data.location 
+                    location: data.location,
+                    photoURL: `${process.env.REACT_APP_API_URL}/user/photo/${data._id}?${new Date().getTime()}`
                 })
             }
         })
@@ -56,10 +61,57 @@ class EditProfile extends Component {
 
     handleChange = (name) => (event) => {
         this.setState({error:''});
-        const value = name === "photo" ? event.target.files[0] : event.target.value;
-        const fileSize = name === "photo" ? event.target.files[0].size : 0;
-        this.userData.set(name, value)
-        this.setState({[name]: value, fileSize})
+        if(name==='photo'){
+            console.log('photo')
+            const reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
+            reader.onload = event => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const elem = document.createElement('canvas');
+                    const maxSize = 250;
+                    console.log(img)
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height *= maxSize / width;
+                            width = maxSize;
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width *= maxSize / height;
+                            height = maxSize;
+                        }
+                    }
+                    elem.width = width;
+                    elem.height = height;
+                    const ctx = elem.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    console.log(ctx);
+                    const dataUrl = ctx.canvas.toDataURL('image/jpeg');
+                    ctx.canvas.toBlob((blob)=>{
+                        console.log(blob, dataUrl)
+                        this.userData.set(name, blob)
+                        this.setState({
+                            [name]:blob,
+                            photoURL: dataUrl,
+                            fileSize: blob.size
+                        });
+                        console.log(this.state)    
+                    });
+                }
+                reader.onerror = error => console.log(error);
+            }
+        }
+        else{
+            const value =  event.target.value;
+            const fileSize =  0;
+            this.userData.set(name, value)
+            this.setState({[name]: value, fileSize})
+        }
+        
       };
 
 
@@ -69,8 +121,8 @@ class EditProfile extends Component {
             this.setState({error:'Name is required.', loading:false});
             return false
         }
-        if(fileSize > 800000){
-            this.setState({error:'File size must be less than 800kb', loading:false});
+        if(fileSize > 1000000){
+            this.setState({error:'File size must be less than 1000kb', loading:false});
             return false
         }
         return true
@@ -102,7 +154,6 @@ class EditProfile extends Component {
     }
 
     editProfileForm = (name, location, email, password, about, classes, id) => {
-        const photoURL = id ? `${process.env.REACT_APP_API_URL}/user/photo/${id}?${new Date().getTime()}` : '../assets/avatar.png'
         return(
         
         <form >
@@ -120,7 +171,7 @@ class EditProfile extends Component {
                 onChange={this.handleChange("location")}
                 value={location}
             />
-            <img src={photoURL} alt='' width='300'/>
+            <img src={this.state.photoURL} alt='' width='250'/>
             <Typography color='textSecondary' style={{fontSize:'12px', paddingBottom:'6px'}} >
                 Profile Image
             </Typography>
@@ -167,13 +218,6 @@ class EditProfile extends Component {
                     
 
                     {loading ? <div>Loading...</div> : ''}
-                </Paper>
-                <Paper style={{maxWidth:'600px', padding:'16px', marginTop:'16px'}}>
-                    <Typography variant='h5' style={{color:'#e74c3c'}}>
-                        Danger Zone
-                    </Typography>
-                    <br/>
-                    <DeleteUser userId={id} />
                 </Paper>
                 <br/>
          
