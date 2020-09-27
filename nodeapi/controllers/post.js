@@ -2,6 +2,8 @@ const Post = require('../models/post');
 const formidable = require('formidable');
 const fs = require('fs');
 const _ = require('lodash');
+const AWS = require('aws-sdk');
+const uuid = require('uuid');
 
 
 exports.postById = (req, res, next, id) =>{
@@ -35,7 +37,7 @@ exports.getPosts = async (req, res) => {
         .populate("postedBy", "_id name")
         .sort('-created')
         .limit(perPage)
-        .select("_id title body created");
+        .select("_id title body created photo_url");
 })
   .then((posts)=> {
     res.json(posts);
@@ -60,7 +62,7 @@ exports.getFeed = async (req, res) => {
     .sort('-created')
     .limit(perPage)
     .populate('postedBy', '_id name')
-    .select("_id title body created")
+    .select("_id title body created photo_url")
   }) 
   .then((posts)=> {
     res.json(posts);
@@ -68,8 +70,7 @@ exports.getFeed = async (req, res) => {
   .catch(err => console.log(err));
 }
 
-exports.createPost = (req, res) => {
-  
+exports.createPost = (req, res) => {  
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) =>{
@@ -78,14 +79,19 @@ exports.createPost = (req, res) => {
         error: "Image could not be uploaded."
       })
     }
+    const uuid_v4 = uuid.v4()
+    var objectParams = {Bucket: 'mycoopnetwork', Key: `${files.photo.name}-${uuid_v4}.jpg`, Body: fs.readFileSync(files.photo.path)};
+    var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
+    uploadPromise.then(
+      function(data) {
+        console.log(data);
+      });    
     let post = new Post(fields);
-    console.log(post)
     req.profile.hashed_password = undefined;
     req.profile.salt = undefined;
     post.postedBy = req.profile;
     if(files.photo){
-      post.photo.data = fs.readFileSync(files.photo.path);
-      post.photo.contenType = files.photo.type;
+      post.photo_url = `https://mycoopnetwork.s3-us-west-2.amazonaws.com/${files.photo.name}-${uuid_v4}.jpg`;
     }
     post.save((err, result)=>{
       if(err){

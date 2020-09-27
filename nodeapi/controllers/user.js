@@ -3,7 +3,6 @@ const _ = require('lodash');
 const formidable = require('formidable');
 const fs = require('fs');
 
-
 exports.userById = (req, res, next, id) =>{
   User.findById(id)
   .populate('following','_id name location about')  
@@ -44,7 +43,6 @@ exports.allUsers = (req, res) => {
 exports.getUser = (req, res) =>{
   req.profile.hashed_password = undefined;
   req.profile.salt = undefined;
-
   return res.json(req.profile);
 };
 
@@ -100,7 +98,6 @@ exports.userPhoto = (req, res, next)=>{
 }
 
 exports.addFollowing = (req, res, next)=> {
-  console.log('add following', req.body.userId, req.body.followId)
   User.findByIdAndUpdate(req.body.userId, 
     {$push: {following: req.body.followId}}, (err, result)=>{
       if(err){

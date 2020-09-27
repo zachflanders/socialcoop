@@ -14,7 +14,15 @@ class DeletePost extends Component {
         }
     }
 
-    deletePost = () =>{                
+    componentWillUnMount = () => {
+        if(this.state.redirect === true){
+            return(
+                <Redirect to='/' />
+            )
+        }
+    } 
+
+    deletePost = () => {                
         const token = isAuthenticated().token;
         const postId = this.props.id;
         deleteById(postId, token)

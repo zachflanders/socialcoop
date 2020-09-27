@@ -25,7 +25,6 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const commentRoutes = require("./routes/comment");
 
-
 //middleware
 app.use(cors());
 app.use(morgan("dev"));
@@ -41,7 +40,6 @@ app.use(function (err, req, res, next) {
     res.status(401).json({error: "unauthorized"});
   }
 });
-
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
   app.use(express.static(path.join(__dirname, '../react-front/build')));
@@ -50,9 +48,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '../react-front/build', 'index.html'));
   });
 }
-
-
-
 const port = process.env.PORT || 8080;
 app.listen(port, ()=>{
   console.log(`A Node JS API is listening on port ${port}`)

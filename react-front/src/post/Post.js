@@ -18,7 +18,8 @@ class Post extends Component {
             post: {
                 title: null,
                 body: null,
-                created: null
+                created: null,
+                photo_url: null,
             }        
         }
     }

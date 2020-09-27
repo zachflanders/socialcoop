@@ -11,10 +11,9 @@ import {signin, authenticate} from '../auth'
 
 
 const styles = theme => ({
-
   textField: {
     width: '100%',
-    marginBottom:'16px'
+    marginBottom:'16px',
   }
 });
 
@@ -26,13 +25,13 @@ class Signin extends Component {
       password:'',
       error: '',
       redirectToReferer: false,
-      loading: false
+      loading: false,
     }
   }
 
   handleChange = (name) => (event) => {
     this.setState({error:''});
-    this.setState({[name]: event.target.value})
+    this.setState({[name]: event.target.value});
   };
 
   clickSubmit = event => {
@@ -41,7 +40,7 @@ class Signin extends Component {
     const {email, password} = this.state;
     const user = {
       email,
-      password
+      password,
     };
     signin(user)
     .then(data =>{
@@ -56,10 +55,7 @@ class Signin extends Component {
         //redirect
       }
     });
-
   };
-
-
 
   signinForm = (email, password, classes) => (
     <form style={{textAlign:'center'}}>
@@ -91,7 +87,7 @@ class Signin extends Component {
 
   render() {
     const { classes } = this.props;
-    const {name, email, password, error, redirectToReferer, loading} = this.state;
+    const {email, password, redirectToReferer, loading} = this.state;
     if(redirectToReferer){
       return <Redirect to='/' />
     }

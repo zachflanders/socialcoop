@@ -18,16 +18,10 @@ class PostCardImage extends Component {
 
     componentDidMount(){
         const {post} = this.props
-        fetch(`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`).then(res => {
-            const reader = res.body.getReader();
-            reader.read().then((data) => {
-                if(data.value){
-                    this.setState({image:true})
-                }
-                
-            });
-        });
-
+        console.log(post.photo_url);
+        if(post.photo_url){
+            this.setState({image:true})
+        }
     }
 
     render (){
@@ -40,7 +34,7 @@ class PostCardImage extends Component {
                     backgroundPosition: "center center",
                     backgroundRepeat: "no-repeat",
                     backgroundSize: 'cover',
-                    backgroundImage: `url(${process.env.REACT_APP_API_URL}/post/photo/${post._id})`
+                    backgroundImage: `url(${post.photo_url})`,
                 }}
                 />)
         }
