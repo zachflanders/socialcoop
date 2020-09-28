@@ -58,7 +58,7 @@ class Nav extends React.Component {
     const { classes, history } = this.props;
     const {anchorEl} = this.state;
     const open = Boolean(anchorEl);
-    const photoURL = isAuthenticated() ? `${process.env.REACT_APP_API_URL}/user/photo/${isAuthenticated().user._id }?${new Date().getTime()}` : '../assets/avatar.png'
+    const photoURL = isAuthenticated() ? isAuthenticated().user.photo_url : '../assets/avatar.png'
 
     return (
       <div className={classes.root}>
