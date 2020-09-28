@@ -92,7 +92,7 @@ const Home = () => (
       <Feed />
       <div style={{width:'260px', marginLeft:'0px', marginRight:'16px'}} className='desktop'>
       <Box style={{paddingRight:'16px'}}>
-        <Paper style={{padding:'16px', width:'228px', background:'#c8e6c9'}}>
+        <Paper style={{padding:'16px', width:'228px'}}>
         <FontAwesomeIcon icon={faBullhorn} />&nbsp;&nbsp;
           Welcome to the alpha preview of myCoöp.
         </Paper>
