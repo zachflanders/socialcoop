@@ -58,8 +58,7 @@ class Nav extends React.Component {
     const { classes, history } = this.props;
     const {anchorEl} = this.state;
     const open = Boolean(anchorEl);
-    const photoURL = isAuthenticated() ? isAuthenticated().user.photo_url : '../assets/avatar.png'
-
+    const photoURL = isAuthenticated() ? isAuthenticated().user.photo_url : '../assets/avatar.png';
     return (
       <div className={classes.root}>
         <AppBar position="static" style={{marginBottom:'32px'}}>

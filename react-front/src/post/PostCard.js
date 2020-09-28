@@ -88,7 +88,7 @@ class PostCard extends Component{
         const {post} = this.props
         const posterId = post.postedBy ? post.postedBy._id : '';
         const posterName = post.postedBy ? post.postedBy.name : '';
-        const photoURL =  `${process.env.REACT_APP_API_URL}/user/photo/${posterId}?${new Date().getTime()}`;
+        const photoURL =  post.postedBy ? post.postedBy.photo_url: '';
         var dateOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute:'numeric' };
         return (
             <Card 

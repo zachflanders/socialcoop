@@ -61,7 +61,6 @@ class Profile extends Component {
         const {redirectToSignin, user} = this.state;
         var dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
 
-        photoURL = user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : ''
 
         if(redirectToSignin) return <Redirect to="/login" />
         const { match, location, history } = this.props;
@@ -71,7 +70,7 @@ class Profile extends Component {
                 <div style={{width:'100%', paddingRight:'16px'}}>
                 <div style={{display:'flex', flexWrap:'wrap'}}>
                     <Avatar 
-                        src={photoURL}
+                        src={user.photo_url}
                         imgProps={{ onError: (e) => { e.target.src = DefaultProfile; } }}
                         style={{
                             marginRight:'10px', 

@@ -28,7 +28,8 @@ class SidebarNav extends React.Component {
   }
 
   render(){
-    const photoURL = isAuthenticated() ? `${process.env.REACT_APP_API_URL}/user/photo/${isAuthenticated().user._id }?${new Date().getTime()}` : '../assets/avatar.png'
+    console.log(isAuthenticated().user.photo_url)
+    const photoURL = isAuthenticated() ? isAuthenticated().user.photo_url : '../assets/avatar.png'
 
     return (
       <div style={{marginRight: '16px', minWidth:'260px', width:'260px'}} className='desktop'>

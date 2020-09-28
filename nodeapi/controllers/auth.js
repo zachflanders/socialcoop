@@ -31,10 +31,10 @@ exports.signin = (req, res) => {
         error: "Email and password do not match"
       });
     }
-    const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET);
+    const token = jwt.sign({_id: user._id }, process.env.JWT_SECRET);
     res.cookie("t", token, {expire: new Date() + 9999});
-    const {_id, name, email} = user;
-    return res.json({token, user:{_id, email, name}});
+    const {_id, name, email, photo_url} = user;
+    return res.json({token, user:{_id, email, name, photo_url}});
   })
 }
 exports.signout = (req, res) => {
@@ -66,7 +66,7 @@ exports.forgotPassword = (req, res) => {
 
       // generate a token with user id and secret
       const token = jwt.sign(
-          { _id: user._id, iss: "NODEAPI" },
+          { _id: user._id, iss: "NODEAPI"},
           process.env.JWT_SECRET
       );
 

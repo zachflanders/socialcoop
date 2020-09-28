@@ -24,7 +24,6 @@ router.get('/users',  allUsers);
 router.get('/user/:userId', requireSignin, getUser);
 router.put('/user/:userId', requireSignin, hasAuthorization, updateUser);
 router.delete('/user/:userId', requireSignin, deleteUser);
-router.get("/user/photo/:userId", userPhoto)
 
 //any route containing userId, our app will first execute userById()
 router.param("userId", userById)

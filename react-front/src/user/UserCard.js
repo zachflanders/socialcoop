@@ -12,7 +12,7 @@ const UserCard = (props) =>{
     console.log(props);
     const {user} = props
 
-    const photoURL =  `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}`;
+    const photoURL =  user.photo_url;
     return (<Card style={{marginBottom:'10px', marginRight:'10px', width:'280px', height:'auto'}}>
                         <CardHeader
                             avatar = {

@@ -29,8 +29,7 @@ class EditProfile extends Component {
             fileSize: 0,
             about:'',
             location:'',
-            photo: null,
-            photoURL: '',
+            photo_url: '',
         }
     }
 
@@ -47,7 +46,7 @@ class EditProfile extends Component {
                     name: data.name, 
                     about:data.about,
                     location: data.location,
-                    photoURL: `${process.env.REACT_APP_API_URL}/user/photo/${data._id}?${new Date().getTime()}`
+                    photo_url: data.photo_url
                 })
             }
         })
@@ -62,7 +61,6 @@ class EditProfile extends Component {
     handleChange = (name) => (event) => {
         this.setState({error:''});
         if(name==='photo'){
-            console.log('photo')
             const reader = new FileReader();
             reader.readAsDataURL(event.target.files[0]);
             reader.onload = event => {
@@ -71,7 +69,6 @@ class EditProfile extends Component {
                 img.onload = () => {
                     const elem = document.createElement('canvas');
                     const maxSize = 250;
-                    console.log(img)
                     let width = img.width;
                     let height = img.height;
                     if (width > height) {
@@ -89,14 +86,12 @@ class EditProfile extends Component {
                     elem.height = height;
                     const ctx = elem.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-                    console.log(ctx);
                     const dataUrl = ctx.canvas.toDataURL('image/jpeg');
                     ctx.canvas.toBlob((blob)=>{
-                        console.log(blob, dataUrl)
                         this.userData.set(name, blob)
                         this.setState({
                             [name]:blob,
-                            photoURL: dataUrl,
+                            photo_url: dataUrl,
                             fileSize: blob.size
                         });
                         console.log(this.state)    
@@ -116,7 +111,7 @@ class EditProfile extends Component {
 
 
     isValid = () =>{
-        const {name, email, password, fileSize} = this.state;
+        const {name, fileSize} = this.state;
         if(name.length === 0){
             this.setState({error:'Name is required.', loading:false});
             return false
@@ -153,52 +148,51 @@ class EditProfile extends Component {
         }
     }
 
-    editProfileForm = (name, location, email, password, about, classes, id) => {
+    editProfileForm = (name, location, about, classes) => {
         return(
-        
-        <form >
-          <TextField
-            id="name"
-            className={classes.textField}
-            label="Name"
-            onChange={this.handleChange("name")}
-            value={name}
-            />
-            <TextField
-                id="location"
-                className={classes.textField}
-                label="Location"
-                onChange={this.handleChange("location")}
-                value={location}
-            />
-            <img src={this.state.photoURL} alt='' width='250'/>
-            <Typography color='textSecondary' style={{fontSize:'12px', paddingBottom:'6px'}} >
-                Profile Image
-            </Typography>
-            <input
-                onChange = {this.handleChange("photo")}
-                accept="image/*"
-                type="file"
-                id='profileUpload'
-                style= {{marginBottom:'16px'}}
+            <form >
+                <TextField
+                    id="name"
+                    className={classes.textField}
+                    label="Name"
+                    onChange={this.handleChange("name")}
+                    value={name}
                 />
-            <TextField
-                id="about"
-                multiline
-                className={classes.textField}
-                label="About"
-                onChange={this.handleChange("about")}
-                value={about}
-            />
-        <Button
-          onClick={this.clickSubmit}
-          variant='contained'
-          color='primary'>
-            Save Edits
-        </Button>
-        </form>
-      )
-        }
+                <TextField
+                    id="location"
+                    className={classes.textField}
+                    label="Location"
+                    onChange={this.handleChange("location")}
+                    value={location}
+                />
+                <img src={this.state.photo_url} alt='' width='250'/>
+                <Typography color='textSecondary' style={{fontSize:'12px', paddingBottom:'6px'}} >
+                    Profile Image
+                </Typography>
+                <input
+                    onChange = {this.handleChange("photo")}
+                    accept="image/*"
+                    type="file"
+                    id='profileUpload'
+                    style= {{marginBottom:'16px'}}
+                />
+                <TextField
+                    id="about"
+                    multiline
+                    className={classes.textField}
+                    label="About"
+                    onChange={this.handleChange("about")}
+                    value={about}
+                />
+                <Button
+                onClick={this.clickSubmit}
+                variant='contained'
+                color='primary'>
+                    Save Edits
+                </Button>
+            </form>
+        )
+    }
 
     render(){
         const { classes } = this.props;
@@ -206,6 +200,7 @@ class EditProfile extends Component {
         if(redirectToProfile){
             return(<Redirect to={`/user/${id}`} />)
         }
+        console.log(classes);
         return(
             <div className='container'>
                 <Typography variant='h4' style={{flexGrow:'1'}}>
@@ -213,15 +208,11 @@ class EditProfile extends Component {
                 </Typography> 
                 {error}
                 <Paper style={{maxWidth:'600px', padding:'16px', marginTop:'16px'}}>
-                    {this.editProfileForm(name, location, email, password, about, classes, id)}
+                    {this.editProfileForm(name, location, about, classes)}
                     <br/>
-                    
-
                     {loading ? <div>Loading...</div> : ''}
                 </Paper>
                 <br/>
-         
-
             </div>
         )      
     }

@@ -6,7 +6,7 @@ const {ObjectId} = mongoose.Schema;
 
 exports.commentById = (req, res, next, id) =>{
     Comment.findById(id)
-    .populate("user","_id name")
+    .populate("user","_id name  photo_url")
     .exec((err, comment)=>{
       if(err || !comment){
         return res.status(400).json({
@@ -46,7 +46,7 @@ exports.createComment = (req, res) => {
 exports.getComments = (req, res) =>{
     const comments = Comment.find({'post': req.post._id })
     .sort('createdAt')
-    .populate('user', '_id name')
+    .populate('user', '_id name photo_url')
     .populate('post', '_id')
     .select("_id text createdAt")
     .then((comments)=> {

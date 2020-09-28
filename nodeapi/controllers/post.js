@@ -8,7 +8,7 @@ const uuid = require('uuid');
 
 exports.postById = (req, res, next, id) =>{
   Post.findById(id)
-  .populate("postedBy","_id name")
+  .populate("postedBy","_id name photo_url")
   .exec((err, post)=>{
     if(err || !post){
       return res.status(400).json({
@@ -26,7 +26,7 @@ exports.getPostById = (req, res) => {
 
 exports.getPosts = async (req, res) => {
   const currentPage = req.query.page || 1;
-  const perPage = 3;
+  const perPage = 5;
   let totalItems;
   const posts = await Post.find()
   .countDocuments()
@@ -34,7 +34,7 @@ exports.getPosts = async (req, res) => {
     totalItems = count;
     return Post.find()
         .skip((currentPage - 1) * perPage)
-        .populate("postedBy", "_id name")
+        .populate("postedBy", "_id name photo_url")
         .sort('-created')
         .limit(perPage)
         .select("_id title body created photo_url");
@@ -47,7 +47,7 @@ exports.getPosts = async (req, res) => {
 
 exports.getFeed = async (req, res) => {
   const currentPage = req.query.page || 1;
-  const perPage = 3;
+  const perPage = 5;
   let totalItems;
   following = req.profile.following.map(user => user._id)
   following.push(req.profile._id)
@@ -61,7 +61,7 @@ exports.getFeed = async (req, res) => {
     .skip((currentPage - 1) * perPage)
     .sort('-created')
     .limit(perPage)
-    .populate('postedBy', '_id name')
+    .populate('postedBy', '_id name photo_url')
     .select("_id title body created photo_url")
   }) 
   .then((posts)=> {
@@ -79,34 +79,44 @@ exports.createPost = (req, res) => {
         error: "Image could not be uploaded."
       })
     }
-    const uuid_v4 = uuid.v4()
-    var objectParams = {Bucket: 'mycoopnetwork', Key: `${files.photo.name}-${uuid_v4}.jpg`, Body: fs.readFileSync(files.photo.path)};
-    var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
-    uploadPromise.then(
-      function(data) {
-        console.log(data);
-      });    
+     
     let post = new Post(fields);
     req.profile.hashed_password = undefined;
     req.profile.salt = undefined;
     post.postedBy = req.profile;
     if(files.photo){
-      post.photo_url = `https://mycoopnetwork.s3-us-west-2.amazonaws.com/${files.photo.name}-${uuid_v4}.jpg`;
+      const uuid_v4 = uuid.v4()
+      var objectParams = {Bucket: 'mycoopnetwork', Key: `${files.photo.name}-${uuid_v4}.jpg`, Body: fs.readFileSync(files.photo.path)};
+      var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
+      uploadPromise.then(data => {
+          console.log(data);
+          post.photo_url = `https://mycoopnetwork.s3-us-west-2.amazonaws.com/${files.photo.name}-${uuid_v4}.jpg`;
+          post.save((err, result)=>{
+            if(err){
+              return res.status(400).json({
+                error: err
+              })
+            }
+            res.json(result)
+          });
+      });
     }
-    post.save((err, result)=>{
-      if(err){
-        return res.status(400).json({
-          error: err
-        })
-      }
-      res.json(result)
-    });
+    else {
+      post.save((err, result)=>{
+        if(err){
+          return res.status(400).json({
+            error: err
+          })
+        }
+        res.json(result)
+      });
+    }
   });
 };
 
 exports.postsByUser = (req, res) => {
   Post.find({postedBy: req.profile._id})
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name photo_url")
     .sort("-created")
     .exec((err, posts)=>{
       if(err){
@@ -143,18 +153,32 @@ exports.updatePost = (req, res, next) =>{
     post = _.extend(post, fields)
     post.updated = Date.now()
     if(files.photo){
-      post.photo.data = fs.readFileSync(files.photo.path)
-      post.photo.contentType = files.photo.type
+      const uuid_v4 = uuid.v4()
+      var objectParams = {Bucket: 'mycoopnetwork', Key: `${files.photo.name}-${uuid_v4}.jpg`, Body: fs.readFileSync(files.photo.path)};
+      var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
+      uploadPromise.then(data => {
+          console.log(data);
+          post.photo_url = `https://mycoopnetwork.s3-us-west-2.amazonaws.com/${files.photo.name}-${uuid_v4}.jpg`;
+          post.save((err, result)=>{
+            if(err){
+              return res.status(400).json({
+                error: err
+              })
+            }
+            res.json(result)
+          });
+      });
     }
-    post.save((err, result) =>{
-      if(err){
-        return res.status(400).json({
-          error: err,
-        })
-      }
-      res.json(post);
-
-    })
+    else {
+      post.save((err, result)=>{
+        if(err){
+          return res.status(400).json({
+            error: err
+          })
+        }
+        res.json(result)
+      });
+    }
   })
 }
 
@@ -171,9 +195,4 @@ exports.deletePost = (req, res) => {
       message: `Deleted post "${post.title}"`
     })
   })
-}
-
-exports.photo = (req, res, next) => {
-  res.set("Content-Type", req.post.photo.contentType);
-  return res.send(req.post.photo.data);
 }

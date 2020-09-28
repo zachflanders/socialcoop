@@ -30,9 +30,8 @@ const userSchema = new mongoose.Schema({
     default: Date.now
   },
   updated: Date,
-  photo:{
-    data: Buffer,
-    contentType: String
+  photo_url:{
+    type: String
   },
   about:{
     type: String,
