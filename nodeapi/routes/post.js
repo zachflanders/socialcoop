@@ -27,9 +27,6 @@ router.get("/feed/:userId", requireSignin, hasAuthorization, getFeed)
 router.get("/post/:postId", getPostById);
 router.put("/post/:postId", requireSignin, isPoster, updatePost)
 router.delete("/post/:postId", requireSignin, isPoster, deletePost)
-//photo
-router.get("/post/photo/:postId", photo)
-
 //any route containing :userId, our app will first execute userById()
 router.param("userId", userById)
 //any route containing :postId, our app will first execute postById()

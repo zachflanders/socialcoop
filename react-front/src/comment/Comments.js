@@ -177,8 +177,7 @@ const CommentList = (props) => {
                             <Avatar align='middle'
                                 component={Link}
                                 to={`/user/${comment.user._id}`}
-                                src={`${process.env.REACT_APP_API_URL}/user/photo/${comment.user._id}?${new Date().getTime()}`
-                            }
+                                src={comment.user.photo_url}
                                 imgProps={{ onError: (e) => { e.target.src = DefaultProfile; } }}
                                 style={{
                                     backgroundColor:'#eee',

@@ -2,6 +2,8 @@ const User = require('../models/user');
 const _ = require('lodash');
 const formidable = require('formidable');
 const fs = require('fs');
+const AWS = require('aws-sdk');
+const uuid = require('uuid');
 
 exports.userById = (req, res, next, id) =>{
   User.findById(id)
@@ -37,7 +39,7 @@ exports.allUsers = (req, res) => {
     }
     users = users.filter(user=>user.showInDirectory)
     res.json(users);
-  }).select("name email location about updated created showInDirectory followers")
+  }).select("name email location about updated created showInDirectory followers photo_url")
 };
 
 exports.getUser = (req, res) =>{
@@ -59,24 +61,39 @@ exports.updateUser = (req, res, next) =>{
     user = _.extend(user, fields)
     user.updated = Date.now()
     if(files.photo){
-      user.photo.data = fs.readFileSync(files.photo.path)
-      user.photo.contentType = files.photo.type
-    }
-    user.save((err, result) =>{
-      if(err){
-        return res.status(400).json({
-          error: err,
+      const uuid_v4 = uuid.v4()
+      var objectParams = {Bucket: 'mycoopnetwork', Key: `${files.photo.name}-${uuid_v4}.jpg`, Body: fs.readFileSync(files.photo.path)};
+      var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
+      uploadPromise.then(data => {
+        user.photo_url = `https://mycoopnetwork.s3-us-west-2.amazonaws.com/${files.photo.name}-${uuid_v4}.jpg`;
+        user.save((err) =>{
+          if(err){
+            return res.status(400).json({
+              error: err,
+            })
+          }
+          user.hashed_password = undefined;
+          user.salt = undefined;
+          res.json(user);
         })
-      }
-      user.hashed_password = undefined;
-      user.salt = undefined;
-      res.json(user);
-
-    })
-  })
+      });
+    }
+    else {
+      user.save((err) =>{
+        if(err){
+          return res.status(400).json({
+            error: err,
+          })
+        }
+        user.hashed_password = undefined;
+        user.salt = undefined;
+        res.json(user);
+      });
+    }
+  });
 }
 
-exports.deleteUser = (req, res, next) => {
+exports.deleteUser = (req, res) => {
   let user = req.profile;
   user.remove((err, user)=>{
     if(err){
@@ -93,7 +110,6 @@ exports.userPhoto = (req, res, next)=>{
     res.set("Content-Type",req.profile.photo.contentType)
     return res.send(req.profile.photo.data)
   }
-  
   next()
 }
 
