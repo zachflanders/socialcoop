@@ -18,9 +18,10 @@ class Comments extends Component {
             user:{},
             comments: {},
             loading: true,
+            page: 1,
         }
     }
-    init = (postId) => {
+    init = (postId, page) => {
         getById(postId)
         .then(data =>{
             if(data.error){
@@ -33,7 +34,7 @@ class Comments extends Component {
                 })
             }
         })
-        getComments(postId)
+        getComments(postId, page)
         .then(data =>{
             if(data.error){
                 console.log(data)
@@ -50,7 +51,8 @@ class Comments extends Component {
     componentDidMount(){
         this.commentData = new FormData();
         const postId = this.props.post._id;
-        this.init(postId);  
+        const page = this.props.page
+        this.init(postId, page);  
     }
 
     handleChange = (name) => (event) => {
@@ -69,6 +71,29 @@ class Comments extends Component {
         return true
     }
 
+    loadMore = (number) => {
+        this.setState({ page: this.state.page + number });
+        this.loadComments(this.state.page + number);
+    };
+ 
+    loadLess = (number) => {
+        this.setState({ page: this.state.page - number });
+        this.loadComments(this.state.page - number);
+    };
+
+    loadComments = (page) => {
+        this.setState({comments:[], loading:true});
+        getComments(this.props.post._id, page).then(data =>{
+            console.log(data);
+            if(data.error){
+                console.log(data.error)
+            }
+            else{
+                this.setState({comments:data, loading:false})
+            }
+        })
+    }
+
     clickSubmit = event => {
         (event && event.preventDefault());
         this.setState({loading: true, text:''})
@@ -76,13 +101,14 @@ class Comments extends Component {
             const userId = isAuthenticated().user._id
             const token = isAuthenticated().token;
             const postId = this.props.post._id
+            const page = this.props.page
             comment(userId, token, postId, this.commentData)
             .then(data =>{
                 if(data.error){
                     this.setState({error: data.error.message})
                 }
                 else{
-                    getComments(postId)
+                    getComments(postId, page)
                     .then(data =>{
                         if(data.error){
                             console.log(data)
@@ -124,6 +150,20 @@ class Comments extends Component {
                 <br />
                 <CommentList comments={comments} removeComment={this.removeComment} />
                 {(this.state.loading && <div className='dot-flashing' />)}
+                {(this.state.page > 1 && 
+                        <Button
+                            onClick={() => this.loadLess(1)}
+                        >
+                            Previous
+                        </Button>
+                    )}
+                    {(comments.length > 5 && 
+                        <Button
+                            onClick={() => this.loadMore(1)}
+                        >
+                            Next
+                        </Button>
+                     )}
                 {(isAuthenticated() ? 
                     <form style={{display:'flex', width:'100%'}}>
                         <TextField

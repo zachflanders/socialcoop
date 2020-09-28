@@ -43,12 +43,22 @@ exports.createComment = (req, res) => {
     });
   };
 
-exports.getComments = (req, res) =>{
-    const comments = Comment.find({'post': req.post._id })
-    .sort('createdAt')
-    .populate('user', '_id name photo_url')
-    .populate('post', '_id')
-    .select("_id text createdAt")
+exports.getComments = async (req, res) =>{
+    const currentPage = req.query.page || 1;
+    const perPage = 6;
+    let totalItems;
+    const comments= await Comment.find({'post': req.post._id})
+    .countDocuments()
+    .then(count => {
+      totalItems = count;
+      return Comment.find({'post': req.post._id})
+      .skip((currentPage - 1) * perPage)
+      .sort('createdAt')
+      .limit(perPage)
+      .populate('user', '_id name photo_url')
+      .populate('post', '_id')
+      .select("_id text createdAt")
+    }) 
     .then((comments)=> {
       res.json(comments);
     })
