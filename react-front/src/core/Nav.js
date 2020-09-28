@@ -39,7 +39,8 @@ const styles = {
 
 class Nav extends React.Component {
   state = {
-    anchorEl: null
+    anchorEl: null,
+    theme: isAuthenticated().user.theme
   }
   handleChange = event => {
     this.setState({ auth: event.target.checked });
@@ -55,6 +56,15 @@ class Nav extends React.Component {
       callback();
     }
   };
+
+  update_theme = () => {
+    console.log('update theme')
+    const theme = this.state.theme == 'light' ? 'dark': 'light'
+    this.props.update_theme(theme)
+    this.setState({theme:theme})
+    this.handleClose()
+  }
+
   render(){
     const { classes, history } = this.props;
     const {anchorEl} = this.state;
@@ -126,6 +136,12 @@ class Nav extends React.Component {
                     to={`/user/${isAuthenticated().user._id}/settings`}
                     >
                       Settings
+                    </MenuItem>
+                    <MenuItem 
+                      onClick={this.update_theme}
+                      component={Typography}
+                      >
+                      Switch to {this.state.theme == 'light' ? 'dark' : 'light'} theme
                     </MenuItem>
                   <MenuItem onClick={()=>{this.handleClose(()=>logout(()=>{history.push('/')}))}}>Logout</MenuItem>
                 </Menu>

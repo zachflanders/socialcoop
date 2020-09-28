@@ -46,7 +46,7 @@ class Post extends Component {
         const {post} = this.state;
         const posterId = post.postedBy ? post.postedBy._id : '';
         const posterName = post.postedBy ? post.postedBy.name : '';
-        const photoURL =  `${process.env.REACT_APP_API_URL}/user/photo/${posterId}?${new Date().getTime()}`;
+        const photoURL =  post.postedBy ? post.postedBy.photo_url : '';
         var dateOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute:'numeric' };
         return(
             <div className='post-page'>
@@ -69,7 +69,7 @@ class Post extends Component {
                     </Avatar>
                     
                     <div style={{marginTop:'5px'}} className='post-page-text'>
-                        <Link to={`/user/${posterId}`} style={{textDecoration:'none',color:'#000'}}>{posterName}</Link>
+                        <Link to={`/user/${posterId}`} style={{textDecoration:'none'}}><Typography color='textPrimary'>{posterName}</Typography></Link>
                         <Typography color='textSecondary'>
                             {(post.created && new Date(post.created).toLocaleDateString('en-US', dateOptions))}
                         </Typography>
@@ -77,6 +77,10 @@ class Post extends Component {
                 </Grid>
                 <br/>
                 <Divider />
+                <br />
+                <div style={{width:'100%', textAlign:'center'}}>
+                    <img src={post.photo_url} style={{maxHeight: '500px', maxWidth:'100%'}}></img>
+                </div>
                 <p className='post-page-text'>
                     {
                         (post.body && post.body.split('\n').map((item, key) => {

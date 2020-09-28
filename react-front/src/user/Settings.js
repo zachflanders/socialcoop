@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Typography, TextField, Button, Paper, Divider, FormControlLabel, Checkbox } from '@material-ui/core';
+import { Typography, TextField, Button, Paper, Divider, FormControlLabel, FormControl, FormLabel, Checkbox, Radio, RadioGroup } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import {isAuthenticated} from '../auth';
 import {read, update, updateUser} from './apiUser';
@@ -15,19 +15,21 @@ const styles = theme => ({
   });
 
 class Settings extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
             id:'',
             name:'',
             redirectToProfile: false,
             error:'',
             loading: false,
-            showInDirectory: false
+            showInDirectory: false,
+            theme: isAuthenticated() ? isAuthenticated().user.theme : 'light',
         }
     }
 
     init = (userId) => {
+        console.log(this.props);
         const token = isAuthenticated().token
         read(userId, token)
         .then(data =>{
@@ -38,7 +40,8 @@ class Settings extends Component {
                 this.setState({
                     id: data._id, 
                     name: data.name, 
-                    showInDirectory: data.showInDirectory || false 
+                    showInDirectory: data.showInDirectory || false,
+                    theme: data.theme || 'light',
                 })
             }
         })
@@ -50,13 +53,20 @@ class Settings extends Component {
         this.init(userId);  
     }
 
-    handleChange = (name) => (event) => {
+    handleRadioChange = (name) => (event) => {
         this.setState({error:''});
-        console.log(event.target.checked);
-        const value = event.target.checked;
+        const value = event.target.value;
         this.userData.set(name, value)
         this.setState({[name]: value})
+        this.props.update_theme(event.target.value)
       };
+
+    handleCheckChange = (name) => (event) => {
+    this.setState({error:''});
+    const value = event.target.checked;
+    this.userData.set(name, value)
+    this.setState({[name]: value})
+    };
 
 
     clickSubmit = event => {
@@ -80,15 +90,26 @@ class Settings extends Component {
         });
     }
 
-    editProfileForm = (showInDirectory) => {
+    editProfileForm = (showInDirectory, theme) => {
         return(
         <form >
             <FormControlLabel
                 control={
-                <Checkbox checked={showInDirectory} onChange={this.handleChange('showInDirectory')} value={'showInDirectory'} />
+                <Checkbox checked={showInDirectory} onChange={this.handleCheckChange('showInDirectory')} value={showInDirectory} />
                 }
                 label="Show in Directory/Search"
             />
+            <br />
+            <br />
+
+            <FormControl component="fieldset">
+                <FormLabel component="legend">Theme</FormLabel>
+                <RadioGroup value={theme} onChange={this.handleRadioChange('theme')} >
+                    <FormControlLabel value="light" control={<Radio />} label="Light" />
+                    <FormControlLabel value="dark" control={<Radio />} label="Dark" />
+                </RadioGroup>
+            </FormControl>
+
             <br />
             <Button
             onClick={this.clickSubmit}
@@ -102,7 +123,7 @@ class Settings extends Component {
 
     render(){
         const { classes } = this.props;
-        const { id, name, showInDirectory,error, redirectToProfile, loading} = this.state;
+        const { id, name, showInDirectory,error, redirectToProfile, loading, theme} = this.state;
         if(redirectToProfile){
             return(<Redirect to={`/user/${id}`} />)
         }
@@ -113,7 +134,7 @@ class Settings extends Component {
                 </Typography> 
                 {error}
                 <Paper style={{maxWidth:'600px', padding:'16px', marginTop:'16px'}}>
-                    {this.editProfileForm(showInDirectory)}
+                    {this.editProfileForm(showInDirectory, theme)}
                     <br/>
                     {loading ? <div>Loading...</div> : ''}
                 </Paper>

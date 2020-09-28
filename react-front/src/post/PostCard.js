@@ -113,8 +113,7 @@ class PostCard extends Component{
                         </Avatar>
                     }
 
-                    title = {<Link to={`/user/${posterId}`} style={{textDecoration:'none',color:'#000'}}>{posterName}</Link>}
-                    titleTypographyProps = {{variant:'h6'}}
+                    title = {<Link to={`/user/${posterId}`} style={{textDecoration:'none'}}><Typography color='textPrimary' variant='h6'>{posterName}</Typography></Link>}
                     subheader = {post.created ? 
                         <Typography color='textSecondary' >
                             {new Date(post.created).toLocaleDateString('en-US', dateOptions)}
@@ -126,11 +125,11 @@ class PostCard extends Component{
                 <PostCardImage post={post} />
 
                 <CardContent>
-                    <Typography variant='h4'>
-                        <Link to={`/post/${post._id}`} style={{textDecoration:'none',color:'#000'}}>
+                    <Link to={`/post/${post._id}`} style={{textDecoration:'none'}}>
+                        <Typography variant='h4' color='textPrimary'>
                             {post.title}
-                        </Link>
-                    </Typography>
+                        </Typography>
+                    </Link>
                     <br/>
                     {
                         this.state.body.split('\n').map((item, key) => {

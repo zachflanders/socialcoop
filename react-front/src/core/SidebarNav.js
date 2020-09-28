@@ -14,7 +14,7 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 import SendIcon from '@material-ui/icons/Send';
 import HomeIcon from '@material-ui/icons/Home';
 import ContactsIcon from '@material-ui/icons/Contacts';
-import { Avatar, Button } from '@material-ui/core';
+import { Avatar, Button, Typography } from '@material-ui/core';
 
 import AddIcon from '@material-ui/icons/Add';
 
@@ -55,7 +55,7 @@ class SidebarNav extends React.Component {
                 <ListItemIcon>
                     <HomeIcon />
                 </ListItemIcon>
-                <ListItemText primary="Home Feed" />
+                <ListItemText primary={<Typography color='textPrimary'>Home Feed</Typography>} />
             </ListItem>
             <ListItem 
                 button
@@ -65,7 +65,7 @@ class SidebarNav extends React.Component {
                 <ListItemIcon>
                     <ContactsIcon />
                 </ListItemIcon>
-                <ListItemText primary="Directory" />
+                <ListItemText primary={<Typography color='textPrimary'>Directory</Typography>} />
             </ListItem>
             <ListItem 
                 button
@@ -85,7 +85,7 @@ class SidebarNav extends React.Component {
 
                   </Avatar>
                 </ListItemIcon>
-                <ListItemText primary="Profile" />
+                <ListItemText primary={<Typography color='textPrimary'>Profile</Typography>} />
             </ListItem>
             
         </List>
