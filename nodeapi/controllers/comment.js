@@ -18,11 +18,8 @@ exports.commentById = (req, res, next, id) =>{
     }) 
   }
 
-
 exports.createComment = (req, res) => {
-    console.log('creating comment')
     let form = new formidable.IncomingForm();
-    console.log('creating comment')
     form.keepExtensions = true;
     form.parse(req, (err, fields, files) =>{
       if(err){
@@ -48,7 +45,6 @@ exports.createComment = (req, res) => {
 
 exports.getComments = (req, res) =>{
     const comments = Comment.find({'post': req.post._id })
-
     .sort('createdAt')
     .populate('user', '_id name')
     .populate('post', '_id')
@@ -60,7 +56,6 @@ exports.getComments = (req, res) =>{
   }
 
   exports.isCommenter = (req, res, next) =>{
-    console.log(req.comment)
     let isCommenter = req.comment && req.auth && req.comment.user._id == req.auth._id
     if(!isCommenter){
       return res.status(403).json({

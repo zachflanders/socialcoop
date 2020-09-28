@@ -159,7 +159,6 @@ class EditPost extends Component {
     }
 
     editPostForm = (title, body, photo, id, classes) => {
-        //const photoURL = id ? `${process.env.REACT_APP_API_URL}/post/photo/${post._id}?${new Date().getTime()}` : ''
         return(
         
         <form >

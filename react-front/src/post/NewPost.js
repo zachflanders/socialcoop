@@ -29,7 +29,6 @@ class NewPost extends Component {
         }
     }
 
-
     componentDidMount(){
         this.postData = new FormData();
         this.setState({user:isAuthenticated().user})
@@ -106,7 +105,6 @@ class NewPost extends Component {
             return false
         }
         return true
-
     }
 
     clickSubmit = event => {
@@ -134,42 +132,40 @@ class NewPost extends Component {
     }
 
     newPostForm = (title, body, photo, user, classes) => {
-        //const photoURL = id ? `${process.env.REACT_APP_API_URL}/post/photo/${post._id}?${new Date().getTime()}` : ''
         return(
-        
-        <form >
-          <TextField
-            id="title"
-            className={classes.textField}
-            label="Title"
-            onChange={this.handleChange("title")}
-            value={title}
-            />
-            <img src={this.state.photoURL} alt='' width='100%'/>
-            <input
-                onChange = {this.handleChange("photo")}
-                accept="image/*"
-                type="file"
-                id='photoUpload'
-                style= {{marginBottom:'16px'}}
+            <form >
+                <TextField
+                    id="title"
+                    className={classes.textField}
+                    label="Title"
+                    onChange={this.handleChange("title")}
+                    value={title}
+                    />
+                <img src={this.state.photoURL} alt='' width='100%'/>
+                <input
+                    onChange = {this.handleChange("photo")}
+                    accept="image/*"
+                    type="file"
+                    id='photoUpload'
+                    style= {{marginBottom:'16px'}}
+                    />
+                <TextField
+                    id="body"
+                    multiline
+                    className={classes.textField}
+                    label="Post"
+                    onChange={this.handleChange("body")}
+                    value={body}
                 />
-            <TextField
-                id="body"
-                multiline
-                className={classes.textField}
-                label="Post"
-                onChange={this.handleChange("body")}
-                value={body}
-            />
-            <Button
-            onClick={this.clickSubmit}
-            variant='contained'
-            color='primary'>
-                Publish
-            </Button>
-        </form>
-      )
-        }
+                <Button
+                onClick={this.clickSubmit}
+                variant='contained'
+                color='primary'>
+                    Publish
+                </Button>
+            </form>
+        )
+    }
 
     render(){
         const { classes } = this.props;
@@ -183,14 +179,9 @@ class NewPost extends Component {
                 <Paper style={{maxWidth:'600px', padding:'16px', marginTop:'16px'}}>
                     {this.newPostForm(title, body, photo, user, classes)}
                     <br/>
-                    
-
                     {loading ? <div>Loading...</div> : ''}
                 </Paper>
-                
                 <br/>
-         
-
             </div>
         )      
     }

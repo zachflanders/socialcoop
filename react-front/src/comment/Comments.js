@@ -1,15 +1,12 @@
-import React, {Component} from 'react';
-import {list, getById} from '../post/apiPost';
-import {comment, getComments, deleteById} from './apiComment';
-import {Grid, Box, Card, Divider, CardActions, Button, Typography, Avatar, CardHeader, CardContent, TextField, IconButton} from '@material-ui/core';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { getById } from '../post/apiPost';
+import { comment, getComments, deleteById } from './apiComment';
+import { Box, Button, Typography, Avatar, TextField, IconButton } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import DefaultProfile from '../assets/avatar.png'
-import PlaceIcon from '@material-ui/icons/Place';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {isAuthenticated} from '../auth';
-import {isOwner} from '../utils'
-
-
+import { isAuthenticated } from '../auth';
+import { isOwner } from '../utils'
 
 class Comments extends Component {
     constructor(props){
@@ -20,9 +17,8 @@ class Comments extends Component {
             post: {},
             user:{},
             comments: {},
-            loading: true      
+            loading: true,
         }
-
     }
     init = (postId) => {
         getById(postId)
@@ -64,8 +60,7 @@ class Comments extends Component {
         this.setState({[name]: value})
       };
 
-
-      isValid = () =>{
+    isValid = () => {
         const {text} = this.state;
         if(text.length === 0){
             this.setState({error:'Comment is required.', loading:false});
@@ -122,7 +117,7 @@ class Comments extends Component {
     }
 
     render(){
-        const {post, user, error, text, comments} = this.state;
+        const { comments } = this.state;
         return(
             <div>
                 <Typography variant='h6'>Comments</Typography>
@@ -176,8 +171,7 @@ const CommentList = (props) => {
     if(props.comments.length > 0) {
         return props.comments.map(comment => {
             return(
-                <div style={{marginBottom:'30px'}} key={comment._id}>
-                    
+                <div key={comment._id} style={{marginBottom:'30px'}}>
                     <div style={{display:'flex'}}>
                         <div style={{display:'flex', flexGrow:'1'}}>
                             <Avatar align='middle'

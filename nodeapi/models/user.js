@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const uuidv1 = require('uuid/v1');
+const uuid = require('uuid');
 const crypto = require('crypto');
 const { ObjectId } = mongoose.Schema;
 const _ = require("lodash");
@@ -64,7 +64,7 @@ userSchema.virtual('password')
     //create temporary variable called _password
     this._password = password;
     // generate a timestamp
-    this.salt = uuidv1()
+    this.salt = uuid.v1()
     //encrypt the password
     this.hashed_password = this.encryptPassword(password);
   })

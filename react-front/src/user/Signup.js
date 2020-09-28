@@ -9,7 +9,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 import {Link} from 'react-router-dom'
 import {signup} from '../auth';
 
-
 const styles = theme => ({
 
   textField: {
