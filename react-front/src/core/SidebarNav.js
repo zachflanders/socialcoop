@@ -28,6 +28,7 @@ class SidebarNav extends React.Component {
   }
 
   render(){
+    console.log(isAuthenticated().user.photo_url)
     const photoURL = isAuthenticated() ? isAuthenticated().user.photo_url : '../assets/avatar.png'
 
     return (

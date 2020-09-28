@@ -105,14 +105,6 @@ exports.deleteUser = (req, res) => {
   })
 }
 
-exports.userPhoto = (req, res, next)=>{
-  if (req.profile.photo.data){
-    res.set("Content-Type",req.profile.photo.contentType)
-    return res.send(req.profile.photo.data)
-  }
-  next()
-}
-
 exports.addFollowing = (req, res, next)=> {
   User.findByIdAndUpdate(req.body.userId, 
     {$push: {following: req.body.followId}}, (err, result)=>{
@@ -128,8 +120,8 @@ exports.addFollower = (req, res) =>{
     {$push: {followers: req.body.userId}},
     {new: true} 
   )
-  .populate('following', '_id name location about')
-  .populate('followers', '_id name location about')
+  .populate('following', '_id name location about photo_url')
+  .populate('followers', '_id name location about photo_url')
   .exec((err, result)=>{
     if(err){
       return res.status(400).json({error: err})
