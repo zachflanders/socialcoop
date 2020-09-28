@@ -40,7 +40,7 @@ const styles = {
 class Nav extends React.Component {
   state = {
     anchorEl: null,
-    theme: isAuthenticated().user.theme
+    theme: isAuthenticated() ? isAuthenticated().user.theme : 'light'
   }
   handleChange = event => {
     this.setState({ auth: event.target.checked });
