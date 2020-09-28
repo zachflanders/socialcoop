@@ -31,7 +31,7 @@ const Home = () => (
         </span>
         <br />
         <Typography variant='h5' color='textSecondary'>
-          MyCoop is a cooperatively owned social platform that connects you to the people you care about.
+          MyCoöp is a cooperatively owned social platform that connects you to the people you care about.
         </Typography>
         <br />
         <div style={{display:'flex', flexWrap:'wrap'}}>
@@ -42,8 +42,8 @@ const Home = () => (
                <FontAwesomeIcon icon={faUsers} />
              </ListItemAvatar>
              <ListItemText
-               primary={<strong>Cooperative Ownership</strong>}
-               secondary="MyCoop is a user owned cooperative.  Users own the platform and set the policies."
+               primary={<strong>Coöperative Ownership</strong>}
+               secondary="MyCoöp is a user owned coöperative.  Users own the platform and set the policies."
              />
            </ListItem>
             <ListItem alignItems="flex-start">
@@ -65,7 +65,7 @@ const Home = () => (
                  </ListItemAvatar>
                  <ListItemText
                    primary={<strong>No Ads</strong>}
-                   secondary="MyCoop is user supported and does not generate revenue from ads"
+                   secondary="MyCoöp is user supported and does not generate revenue from ads"
                  />
                </ListItem>
                <ListItem alignItems="flex-start">
@@ -74,7 +74,7 @@ const Home = () => (
                   </ListItemAvatar>
                   <ListItemText
                     primary={<strong>Genuine Content</strong>}
-                    secondary="The cooperative business model allows quality content to flourish, not fake news."
+                    secondary="The coöperative business model allows quality content to flourish, not fake news."
                   />
                 </ListItem>
             </List>
@@ -94,7 +94,7 @@ const Home = () => (
       <Box style={{paddingRight:'16px'}}>
         <Paper style={{padding:'16px', width:'228px', background:'#c8e6c9'}}>
         <FontAwesomeIcon icon={faBullhorn} />&nbsp;&nbsp;
-          Welcome to the alpha preview of myCoop.
+          Welcome to the alpha preview of myCoöp.
         </Paper>
         </Box>
         </div>

@@ -13,8 +13,8 @@ export const comment = (userId, token, postId, comment) =>{
     .catch(err => console.log(err));
 }
 
-export const getComments = (postId) => {
-    return fetch(`${process.env.REACT_APP_API_URL}/comments/${postId}`, {
+export const getComments = (postId, page) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/comments/${postId}/?page=${page}`, {
         method: "GET",
     })
     .then(response =>{

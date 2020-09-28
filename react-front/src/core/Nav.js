@@ -12,6 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import {logout, isAuthenticated} from '../auth'
 import { Avatar } from '@material-ui/core';
+import Logo from '../assets/logo.svg'
 import DefaultProfile from '../assets/avatar.png'
 import MenuIcon from '@material-ui/icons/Menu';
 import './nav.css'
@@ -74,7 +75,7 @@ class Nav extends React.Component {
             </IconButton>
             <div className = {classes.grow}>
               <Typography component={Link} to='/' variant="h6" color="inherit" style={{textDecoration:'none', marginRight:'20px'}}>
-                myCoop
+                myCoöp
               </Typography>
             </div>
             {!isAuthenticated() && (
