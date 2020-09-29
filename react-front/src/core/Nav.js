@@ -17,10 +17,6 @@ import DefaultProfile from '../assets/avatar.png'
 import MenuIcon from '@material-ui/icons/Menu';
 import './nav.css'
 
-
-
-
-
 const styles = {
   root: {
     flexGrow: 1,
@@ -35,13 +31,14 @@ const styles = {
   },
 };
 
-
-
 class Nav extends React.Component {
-  state = {
-    anchorEl: null,
-    theme: isAuthenticated() ? isAuthenticated().user.theme : 'light'
+  constructor(props){
+    super(props)
+    this.state = {
+      anchorEl: null,
+    }
   }
+
   handleChange = event => {
     this.setState({ auth: event.target.checked });
   };
@@ -59,14 +56,12 @@ class Nav extends React.Component {
 
   update_theme = () => {
     console.log('update theme')
-    const theme = this.state.theme == 'light' ? 'dark': 'light'
-    this.props.update_theme(theme)
-    this.setState({theme:theme})
-    this.handleClose()
+    const theme = this.props.theme == 'light' ? 'dark': 'light'
+    this.props.update_theme(theme)    
   }
 
   render(){
-    const { classes, history } = this.props;
+    const { classes, history, theme} = this.props;
     const {anchorEl} = this.state;
     const open = Boolean(anchorEl);
     const photoURL = isAuthenticated() ? isAuthenticated().user.photo_url : '../assets/avatar.png';
@@ -138,12 +133,12 @@ class Nav extends React.Component {
                       Settings
                     </MenuItem>
                     <MenuItem 
-                      onClick={this.update_theme}
+                      onClick={()=>{this.update_theme(); this.handleClose()}}
                       component={Typography}
                       >
-                      Switch to {this.state.theme == 'light' ? 'dark' : 'light'} theme
+                      Switch to {theme == 'dark' ? 'Light': 'Dark'} Theme
                     </MenuItem>
-                  <MenuItem onClick={()=>{this.handleClose(()=>logout(()=>{history.push('/')}))}}>Logout</MenuItem>
+                  <MenuItem onClick={()=>{this.handleClose(()=>logout(()=>{history.push('/')})); this.props.change_theme('light')}}>Logout</MenuItem>
                 </Menu>
               </div>
               </>

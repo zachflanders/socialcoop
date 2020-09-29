@@ -5,6 +5,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import MainRouter from './MainRouter';
 import './App.css';
 import { isAuthenticated }  from './auth'
+import {read, update, updateUser} from './user/apiUser';
+
 
 const theme = createMuiTheme({
   palette:{
@@ -61,12 +63,36 @@ class App extends Component  {
   constructor(props){
     super(props)
     this.state = {
+      theme: isAuthenticated() ? isAuthenticated().user.theme : 'light',
       applied_theme: isAuthenticated() ? themes[isAuthenticated().user.theme] : theme       
     }
   }
 
   update_theme = (theme) => {
-    this.setState({applied_theme: themes[theme]})
+    this.setState({
+      theme: theme,
+      applied_theme: themes[theme]
+    })
+    const userId = isAuthenticated().user._id;
+    const token = isAuthenticated().token;
+    read(userId, token)
+      .then(data =>{
+          if(data.error){
+              console.log(data.error)
+          }
+          else{
+            console.log(data);
+            data.theme = theme
+            update(userId, token, data);
+          }
+      });
+  }
+
+  change_theme = (theme) => {
+    this.setState({
+      theme: theme,
+      applied_theme: themes[theme]
+    })
   }
 
   render() {
@@ -74,7 +100,7 @@ class App extends Component  {
       <MuiThemeProvider theme={this.state.applied_theme}>
         <CssBaseline />
         <BrowserRouter>
-          <MainRouter update_theme={this.update_theme} />
+          <MainRouter update_theme={this.update_theme}  theme={this.state.theme} change_theme={this.change_theme} />
         </BrowserRouter>
       </MuiThemeProvider>
 

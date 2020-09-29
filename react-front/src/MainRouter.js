@@ -28,6 +28,8 @@ const MainRouter = (props) => (
     <Nav 
       toggleDrawer = {toggleDrawer}
       update_theme = {props.update_theme}
+      theme = {props.theme}
+      change_theme = {props.change_theme}
     />
     <Switch >
       <Route exact path='/' component={Home}></Route>
@@ -39,11 +41,11 @@ const MainRouter = (props) => (
       />
       <Route exact path='/users' component={Users}></Route>
       <Route exact path='/signup' component={Signup}></Route>
-      <Route exact path='/login' component={Signin}></Route>
+      <Route exact path='/login' render={()=>{return(<Signin update_theme={props.update_theme}/>)}}></Route>
       <PrivateRoute exact path='/post/create' component={NewPost}></PrivateRoute>
       <PrivateRoute exact path='/post/edit/:postId' component={EditPost}></PrivateRoute>
       <Route exact path='/post/:postId' component={Post}></Route>
-      <PrivateRoute exact path='/user/:userId/settings' component={Settings} update_theme={props.update_theme}></PrivateRoute>
+      <PrivateRoute exact path='/user/:userId/settings' component={Settings} update_theme={props.update_theme} theme={props.theme}></PrivateRoute>
       <PrivateRoute exact path='/user/:userId' component={Profile}></PrivateRoute>
       <PrivateRoute exact path='/user/edit/:userId' component={EditProfile}></PrivateRoute>
     </Switch>

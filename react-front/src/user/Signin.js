@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 import {Link, Redirect} from 'react-router-dom'
-import {signin, authenticate} from '../auth'
+import {signin, authenticate, isAuthenticated} from '../auth'
 
 
 const styles = theme => ({
@@ -50,6 +50,7 @@ class Signin extends Component {
       else{
         //authenticate
         authenticate(data, ()=>{
+          this.props.update_theme(isAuthenticated().user.theme)
           this.setState({redirectToReferer: true})
         })
         //redirect

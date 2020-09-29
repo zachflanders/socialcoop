@@ -24,7 +24,6 @@ class Settings extends Component {
             error:'',
             loading: false,
             showInDirectory: false,
-            theme: isAuthenticated() ? isAuthenticated().user.theme : 'light',
         }
     }
 
@@ -41,7 +40,6 @@ class Settings extends Component {
                     id: data._id, 
                     name: data.name, 
                     showInDirectory: data.showInDirectory || false,
-                    theme: data.theme || 'light',
                 })
             }
         })
@@ -75,7 +73,7 @@ class Settings extends Component {
         const userId = this.props.match.params.userId;
         const token = isAuthenticated().token;
         update(userId, token, this.userData)
-        .then(data =>{
+        .then(data => {
             if(data.error){
                 console.log(data.error.message);
                 this.setState({error: data.error.message})
@@ -123,7 +121,8 @@ class Settings extends Component {
 
     render(){
         const { classes } = this.props;
-        const { id, name, showInDirectory,error, redirectToProfile, loading, theme} = this.state;
+        const { id, name, showInDirectory,error, redirectToProfile, loading} = this.state;
+        const { theme } = this.props;
         if(redirectToProfile){
             return(<Redirect to={`/user/${id}`} />)
         }
