@@ -75,17 +75,11 @@ class App extends Component  {
     })
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().token;
-    read(userId, token)
-      .then(data =>{
-          if(data.error){
-              console.log(data.error)
-          }
-          else{
-            console.log(data);
-            data.theme = theme
-            update(userId, token, data);
-          }
-      });
+    let user = new FormData();
+    user.theme = theme
+    update(userId, token, user).then((data)=>{
+      updateUser(data, ()=>{});
+    })
   }
 
   change_theme = (theme) => {

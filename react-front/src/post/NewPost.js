@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { Typography, TextField, Button, Paper, Divider } from '@material-ui/core';
+import { Typography, TextField, Button, Paper, Divider, Container, IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import {isAuthenticated} from '../auth';
 import {create} from './apiPost';
-import {Redirect} from 'react-router-dom';
-
+import ImageIcon from '@material-ui/icons/Image';
 
 const styles = theme => ({
-
     textField: {
       width: '100%',
       marginBottom:'16px'
@@ -37,7 +35,6 @@ class NewPost extends Component {
     handleChange = (name) => (event) => {
         this.setState({error:''});
         if(name==='photo'){
-            console.log('photo')
             const reader = new FileReader();
             reader.readAsDataURL(event.target.files[0]);
             reader.onload = event => {
@@ -46,7 +43,6 @@ class NewPost extends Component {
                 img.onload = () => {
                     const elem = document.createElement('canvas');
                     const maxSize = 800;
-                    console.log(img)
                     let width = img.width;
                     let height = img.height;
                     if (width > height) {
@@ -64,17 +60,14 @@ class NewPost extends Component {
                     elem.height = height;
                     const ctx = elem.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-                    console.log(ctx);
                     const dataUrl = ctx.canvas.toDataURL('image/jpeg');
                     ctx.canvas.toBlob((blob)=>{
-                        console.log(blob, dataUrl)
                         this.postData.set(name, blob)
                         this.setState({
                             [name]:blob,
                             photoURL: dataUrl,
                             fileSize: blob.size
                         });
-                        console.log(this.state)    
                     });
                 }
                 reader.onerror = error => console.log(error);
@@ -119,7 +112,6 @@ class NewPost extends Component {
                     this.setState({error: data.error.message})
                 }
                 else{
-                    console.log('new post');
                     this.setState({
                         loading:false,
                         title: '',
@@ -136,26 +128,37 @@ class NewPost extends Component {
             <form >
                 <TextField
                     id="title"
+                    color='secondary'
                     className={classes.textField}
                     label="Title"
                     onChange={this.handleChange("title")}
                     value={title}
                     />
                 <img src={this.state.photoURL} alt='' width='100%'/>
-                <input
-                    onChange = {this.handleChange("photo")}
-                    accept="image/*"
-                    type="file"
-                    id='photoUpload'
-                    style= {{marginBottom:'16px'}}
+                <label htmlFor="photoUpload">
+                    <input
+                        onChange = {this.handleChange("photo")}
+                        style={{ display: 'none' }}
+                        id='photoUpload'
+                        name="photoUpload"
+                        type="file"
+                        accept="image/*"
                     />
+
+                    <IconButton color="secondary" variant="contained" component="span">
+                        <ImageIcon />
+                    </IconButton>
+                    <br /><br />
+                </label>
                 <TextField
+                    color='secondary'
                     id="body"
                     multiline
                     className={classes.textField}
                     label="Post"
                     onChange={this.handleChange("body")}
                     value={body}
+                    variant="outlined"
                 />
                 <Button
                 onClick={this.clickSubmit}
@@ -171,18 +174,18 @@ class NewPost extends Component {
         const { classes } = this.props;
         const { title, body, photo, user, loading, error} = this.state;
         return(
-            <div className='container'>
-                <Typography variant='h4' style={{flexGrow:'1'}}>
-                   Create a New Post
+            <Container>
+                <Typography variant='h4' style={{maxWidth:'700px', marginRight:'auto', marginLeft:'auto'}}>
+                Create a New Post
                 </Typography> 
                 {error}
-                <Paper style={{maxWidth:'600px', padding:'16px', marginTop:'16px'}}>
+                <Paper style={{maxWidth:'700px', padding:'16px', marginTop:'16px', marginRight:'auto', marginLeft:'auto'}}>
                     {this.newPostForm(title, body, photo, user, classes)}
                     <br/>
                     {loading ? <div>Loading...</div> : ''}
-                </Paper>
+                </Paper>                
                 <br/>
-            </div>
+            </Container>
         )      
     }
 }

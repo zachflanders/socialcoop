@@ -72,6 +72,7 @@ class Settings extends Component {
         this.setState({loading: true})
         const userId = this.props.match.params.userId;
         const token = isAuthenticated().token;
+        console.log(this.userdata)
         update(userId, token, this.userData)
         .then(data => {
             if(data.error){
@@ -79,6 +80,7 @@ class Settings extends Component {
                 this.setState({error: data.error.message})
             }
             else{
+                console.log(data)
                 updateUser(data, ()=>{
                     this.setState({
                         redirectToProfile: true

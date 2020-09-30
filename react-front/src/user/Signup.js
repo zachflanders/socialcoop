@@ -6,8 +6,8 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
-import {Link} from 'react-router-dom'
-import {signup} from '../auth';
+import {Link, Redirect} from 'react-router-dom'
+import {signup, signin, authenticate, isAuthenticated} from '../auth';
 
 const styles = theme => ({
 
@@ -25,7 +25,8 @@ class Signup extends Component {
       email: '',
       password:'',
       error: '',
-      open: false
+      open: false,
+      redirectToHome: false,
     }
   }
 
@@ -42,24 +43,23 @@ class Signup extends Component {
       email,
       password
     };
-    
     signup(user)
     .then(data =>{
       if(data.error){
         this.setState({error: data.error})
       }
       else{
-        this.setState({
-          error: '',
-          name: '',
-          email: '',
-          password: '',
-          open: true
-        })
-      }
+        signin(user).then(data2 =>{
+          console.log(data2);
+            //authenticate
+            authenticate(data2, ()=>{
+              this.props.update_theme(isAuthenticated().user.theme)
+              this.setState({redirectToHome: true})
+            })
+        });
+      };
     });
-
-  };
+  }
 
 
   signupForm = (name, email, password, classes) => (
@@ -99,7 +99,10 @@ class Signup extends Component {
 
   render() {
     const { classes } = this.props;
-    const {name, email, password} = this.state;
+    const {name, email, password, redirectToHome } = this.state;
+    if(redirectToHome){
+      return <Redirect to='/' />
+    }
     return(
       <div>
         <Paper className='centered padded' style={{width:'350px'}}>
@@ -113,10 +116,7 @@ class Signup extends Component {
           open={this.state.error}
           message={this.state.error}
         />
-        <Snackbar
-          open={this.state.open}
-          message={'New account created.  Please login.'}
-        />
+
       </div>
     );
   }
