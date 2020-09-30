@@ -32,7 +32,7 @@ const MainRouter = (props) => (
       change_theme = {props.change_theme}
     />
     <Switch >
-      <Route exact path='/' component={Home}></Route>
+      <Route exact path='/' render={()=>{return(<Home update_theme={props.update_theme}/>)}}></Route>
       <Route exact path="/forgot-password" component={ForgotPassword} />
       <Route
         exact
@@ -40,7 +40,7 @@ const MainRouter = (props) => (
         component={ResetPassword}
       />
       <Route exact path='/users' component={Users}></Route>
-      <Route exact path='/signup' component={Signup}></Route>
+      <Route exact path='/signup' render={()=>{return(<Signup update_theme={props.update_theme}/>)}}></Route>
       <Route exact path='/login' render={()=>{return(<Signin update_theme={props.update_theme}/>)}}></Route>
       <PrivateRoute exact path='/post/create' component={NewPost}></PrivateRoute>
       <PrivateRoute exact path='/post/edit/:postId' component={EditPost}></PrivateRoute>

@@ -131,13 +131,7 @@ class Nav extends React.Component {
                     to={`/user/${isAuthenticated().user._id}/settings`}
                     >
                       Settings
-                    </MenuItem>
-                    <MenuItem 
-                      onClick={()=>{this.update_theme(); this.handleClose()}}
-                      component={Typography}
-                      >
-                      Switch to {theme == 'dark' ? 'Light': 'Dark'} Theme
-                    </MenuItem>
+                  </MenuItem>
                   <MenuItem onClick={()=>{this.handleClose(()=>logout(()=>{history.push('/')})); this.props.change_theme('light')}}>Logout</MenuItem>
                 </Menu>
               </div>

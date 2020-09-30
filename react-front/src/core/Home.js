@@ -8,7 +8,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import {Box, Paper} from '@material-ui/core'
+import {Box, Paper, Container} from '@material-ui/core'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faNewspaper, faUsers, faBullhorn } from '@fortawesome/free-solid-svg-icons'
@@ -22,7 +22,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 
 
 const Home = () => (
-  <div >
+  <div>
   {!isAuthenticated() && (
     <div className='container' style={{display:'flex', flexWrap:'wrap'}}>
       <div style={{flexGrow:1, width:'500px', minWidth:'350px', marginRight:'24px', marginBottom:'24px'}}>
@@ -87,18 +87,16 @@ const Home = () => (
     </div>
   )}
   {isAuthenticated() && (
-    <Box display="flex" style={{paddingLeft:'16px'}}>
+    <Container style={{display:'flex'}}>
       <SidebarNav />
       <Feed />
       <div style={{width:'260px', marginLeft:'0px', marginRight:'16px'}} className='desktop'>
-      <Box style={{paddingRight:'16px'}}>
         <Paper style={{padding:'16px', width:'228px'}}>
-        <FontAwesomeIcon icon={faBullhorn} />&nbsp;&nbsp;
+          <FontAwesomeIcon icon={faBullhorn} />&nbsp;&nbsp;
           Welcome to the alpha preview of myCoöp.
         </Paper>
-        </Box>
-        </div>
-    </Box>
+      </div>
+    </Container>
   )}
 
   </div>
