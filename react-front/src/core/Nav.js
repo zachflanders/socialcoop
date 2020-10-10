@@ -67,7 +67,7 @@ class Nav extends React.Component {
     const photoURL = isAuthenticated() ? isAuthenticated().user.photo_url : '../assets/avatar.png';
     return (
       <div className={classes.root}>
-        <AppBar position="static" style={{marginBottom:'32px'}}>
+        <AppBar position="static" style={{}}>
           <Toolbar>
             <IconButton
                 onClick = {this.props.toggleDrawer(true)}

@@ -129,7 +129,7 @@ class Settings extends Component {
             return(<Redirect to={`/user/${id}`} />)
         }
         return(
-            <div className='container'>
+            <div className='container' style={{marginTop: '16px'}}>
                 <Typography variant='h4' style={{flexGrow:'1'}}>
                    Settings
                 </Typography> 

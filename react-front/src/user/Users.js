@@ -42,7 +42,7 @@ class Users extends Component {
     render(){
         const {users, following} = this.state;
         return(
-            <Box display="flex" style={{paddingLeft:'16px'}}>
+            <Box display="flex" style={{paddingLeft:'16px', marginTop:'16px'}}>
                 <SidebarNav />
                 <div style={{width:'100%', paddingRight:'16px'}}>
                     <Typography variant='h4'>Directory</Typography> 

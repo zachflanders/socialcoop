@@ -104,7 +104,7 @@ class Signup extends Component {
       return <Redirect to='/' />
     }
     return(
-      <div>
+      <div style={{marginTop:'16px'}}>
         <Paper className='centered padded' style={{width:'350px'}}>
           <Typography variant="h5" component="h2" style={{textAlign:'center'}}>Create Account</Typography>
           {this.signupForm(name, email, password, classes)}

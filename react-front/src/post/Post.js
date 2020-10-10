@@ -49,7 +49,7 @@ class Post extends Component {
         const photoURL =  post.postedBy ? post.postedBy.photo_url : '';
         var dateOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute:'numeric' };
         return(
-            <div className='post-page'>
+            <div className='post-page' style={{marginTop:'16px'}}>
                 <Typography variant='h3' style={{marginBottom:'10px'}}>
                     {post.title}
                 </Typography>

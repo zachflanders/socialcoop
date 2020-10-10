@@ -202,7 +202,7 @@ class EditProfile extends Component {
         }
         console.log(classes);
         return(
-            <div className='container'>
+            <div className='container' style={{marginTop:'16px'}}>
                 <Typography variant='h4' style={{flexGrow:'1'}}>
                    Edit Profile
                 </Typography> 

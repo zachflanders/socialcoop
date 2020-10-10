@@ -199,7 +199,7 @@ class EditPost extends Component {
         const { classes } = this.props;
         const {id, title, body, photo, user, loading, error} = this.state;
         return(
-            <div className='container'>
+            <div className='container' style={{marginTop:'16px'}}>
                 <Typography variant='h4' style={{flexGrow:'1'}}>
                    Edit Post
                 </Typography> 

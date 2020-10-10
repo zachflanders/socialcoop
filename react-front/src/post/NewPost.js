@@ -174,7 +174,7 @@ class NewPost extends Component {
         const { classes } = this.props;
         const { title, body, photo, user, loading, error} = this.state;
         return(
-            <Container>
+            <Container style={{marginTop:'16px'}}>
                 <Typography variant='h4' style={{maxWidth:'700px', marginRight:'auto', marginLeft:'auto'}}>
                 Create a New Post
                 </Typography> 

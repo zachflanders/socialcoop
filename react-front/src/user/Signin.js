@@ -93,7 +93,7 @@ class Signin extends Component {
       return <Redirect to='/' />
     }
     return(
-      <div>
+      <div style={{marginTop:'16px'}}>
         <Paper className='centered padded' style={{maxWidth:'350px'}}>
           <Typography variant="h5" component="h2" style={{textAlign:'center'}}>Login</Typography>
           {loading ? <div style={{textAlign:'center'}}>Loading...</div> : ""}

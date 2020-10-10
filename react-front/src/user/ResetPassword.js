@@ -33,7 +33,7 @@ class ResetPassword extends Component {
  
     render() {
         return (
-            <Paper className='centered padded' style={{maxWidth:'350px'}}>
+            <Paper className='centered padded' style={{maxWidth:'350px', marginTop:'16px'}}>
                 <h2>Reset your Password</h2>
  
                 {this.state.message && (

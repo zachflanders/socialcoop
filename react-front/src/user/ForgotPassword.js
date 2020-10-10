@@ -26,7 +26,7 @@ class ForgotPassword extends Component {
  
     render() {
         return (
-            <Paper className='centered padded' style={{maxWidth:'350px'}}>
+            <Paper className='centered padded' style={{maxWidth:'350px', marginTop:'16px'}}>
 
                 <h2>Ask for Password Reset</h2>
  

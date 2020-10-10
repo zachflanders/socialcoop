@@ -65,7 +65,7 @@ class Profile extends Component {
         if(redirectToSignin) return <Redirect to="/login" />
         const { match, location, history } = this.props;
         return(
-            <Box display="flex" style={{paddingLeft:'16px'}}>
+            <Box display="flex" style={{paddingLeft:'16px', marginTop:'16px'}}>
                 <SidebarNav />
                 <div style={{width:'100%', paddingRight:'16px'}}>
                 <div style={{display:'flex', flexWrap:'wrap'}}>
