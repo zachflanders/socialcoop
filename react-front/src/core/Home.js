@@ -22,7 +22,14 @@ const Home = () => (
   <div>
   {!isAuthenticated() && (
     <div style={{display:'flex', flexWrap:'wrap'}}>
-      <div style={{width: '100%', background: `URL(${picnic})`, backgroundSize:'cover', minHeight:'600px'}}>
+      <div style={{
+        width: '100%', 
+        background: `URL(${picnic})`, 
+        backgroundSize:'cover', 
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition:'center top', 
+        minHeight:'600px'
+        }}>
         <div style={{maxWidth:'900px', minWidth:'350px', marginRight:'auto', marginLeft:'auto', marginBottom:'24px', marginTop:'50px', textAlign:'center'}}>
           <span style={{fontSize:'44px', fontWeight:'500'}}>
             Own Your Social Experience

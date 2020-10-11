@@ -87,6 +87,13 @@ class Signup extends Component {
         onChange={this.handleChange("password")}
         value={password}
         />
+      <ul style={{paddingLeft:'16px', marginTop:'0px', textAlign:'left'}}>
+        <Typography variant='caption' color='textSecondary'>
+          <li>Must be at least 8 characters</li>
+          <li>Must contain at least one letter and one number.</li>
+        </Typography>
+        
+      </ul>
     <Button
       type='submit'
       onClick={this.clickSubmit}
